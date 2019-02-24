@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 7709,
   "expoServerNgrokUrl": "https://i6-xiw.anonymous.quizler-expo-ts.exp.direct",
   "packagerNgrokUrl": "https://packager.i6-xiw.anonymous.quizler-expo-ts.exp.direct",
-  "ngrokPid": 5078
+  "ngrokPid": 7737
 }
