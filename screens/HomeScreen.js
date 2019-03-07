@@ -17,10 +17,11 @@ export default class HomeScreen extends React.Component {
       <View style={styles.container}>
         <Swiper
           cards={['DO', 'MORE', 'OF', 'WHAT', 'MAKES', 'YOU', 'HAPPY']}
+          marginBottom={100}
+          marginTop={80}
           renderCard={card => {
             return (
               <View style={styles.card}>
-                {/* <Text style={styles.text}>{card}</Text> */}
                 <FlipCard
                   style={styles.flipCard}
                   friction={6}
