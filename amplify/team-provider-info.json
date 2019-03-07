@@ -1,0 +1,14 @@
+{
+    "dev": {
+        "awscloudformation": {
+            "AuthRoleName": "quizler-20190307112411-authRole",
+            "UnauthRoleArn": "arn:aws:iam::812462004596:role/quizler-20190307112411-unauthRole",
+            "AuthRoleArn": "arn:aws:iam::812462004596:role/quizler-20190307112411-authRole",
+            "Region": "eu-west-1",
+            "DeploymentBucketName": "quizler-20190307112411-deployment",
+            "UnauthRoleName": "quizler-20190307112411-unauthRole",
+            "StackName": "quizler-20190307112411",
+            "StackId": "arn:aws:cloudformation:eu-west-1:812462004596:stack/quizler-20190307112411/26600c60-40c3-11e9-b395-06982f8c16e4"
+        }
+    }
+}

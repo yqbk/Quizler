@@ -20,6 +20,8 @@
     "@types/expo": "^32.0.3",
     "@types/react": "^16.8.4",
     "@types/react-native": "^0.57.38",
+    "aws-amplify": "^1.1.22",
+    "aws-amplify-react-native": "^2.1.8",
     "expo": "^32.0.0",
     "react": "16.5.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
