@@ -1,12 +1,44 @@
 import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import { AppLoading, Asset, Font, Icon } from 'expo';
-import AppNavigator from '../navigation/AppNavigator';
+import AppNavigator from '../navigation/AppNavigator.js';
 
-export default class App extends React.Component {
+import Amplify from '@aws-amplify/core';
+import Auth from '@aws-amplify/auth';
+import { withAuthenticator } from 'aws-amplify-react-native';
+import awsconfig from '../aws-exports';
+
+// retrieve temporary AWS credentials and sign requests
+Auth.configure(awsconfig);
+
+const signUpConfig: any = {
+  hiddenDefaults: ['phone_number'],
+};
+class App extends React.Component {
   state = {
     isLoadingComplete: false,
+    username: '',
+    password: '',
+    phone_number: '',
+    email: '',
+    authCode: '',
+    user: {},
   };
+
+  async signUp() {
+    const { username, password, email } = this.state;
+    await Auth.signUp({
+      username,
+      password,
+      attributes: { email },
+    });
+    console.log('sign up successful!');
+  }
+  async confirmSignUp() {
+    const { username, authCode } = this.state;
+    await Auth.configSignignUp(username, authCode);
+    console.log('confirm sign up successful!');
+  }
 
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
@@ -53,6 +85,12 @@ export default class App extends React.Component {
     this.setState({ isLoadingComplete: true });
   };
 }
+
+export default withAuthenticator(
+  App,
+  // Amplify Auth config
+  { includeGreetings: true, signUpConfig }
+);
 
 const styles = StyleSheet.create({
   container: {
