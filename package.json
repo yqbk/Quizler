@@ -7,7 +7,7 @@
     "eject": "expo eject",
     "ts": "tsc",
     "ts-watch": "tsc -w",
-    "ts-lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
+    "ts-lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}' --fix",
     "ts-lint-watch": "yarn ts-lint; chokidar 'src/**/*.{ts,tsx}' -c 'yarn ts-lint'",
     "test": "jest",
     "test-watch": "jest --watch"
