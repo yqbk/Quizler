@@ -1,14 +1,48 @@
+import { AppLoading, Asset, Font, Icon } from 'expo';
 import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
-import { AppLoading, Asset, Font, Icon } from 'expo';
-import AppNavigator from '../navigation/AppNavigator';
+import AppNavigator from '../navigation/AppNavigator.js';
 
-export default class App extends React.Component {
-  state = {
+import Auth from '@aws-amplify/auth';
+import { withAuthenticator } from 'aws-amplify-react-native';
+import awsconfig from '../aws-exports';
+import { MyTheme } from './AuthConfig';
+
+// retrieve temporary AWS credentials and sign requests
+Auth.configure(awsconfig);
+
+const signUpConfig: any = {
+  hiddenDefaults: ['phone_number'],
+};
+
+class App extends React.Component {
+  public state = {
     isLoadingComplete: false,
+    username: '',
+    phone_number: '',
+    password: '',
+    email: '',
+    authCode: '',
+    user: {},
   };
 
-  render() {
+  public async signUp() {
+    const { username, password, email } = this.state;
+    await Auth.signUp({
+      username,
+      password,
+      attributes: { email },
+    });
+    console.log('sign up successful!');
+  }
+
+  public async confirmSignUp() {
+    const { username, authCode } = this.state;
+    await Auth.configSignignUp(username, authCode);
+    console.log('confirm sign up successful!');
+  }
+
+  public render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
@@ -27,7 +61,7 @@ export default class App extends React.Component {
     }
   }
 
-  _loadResourcesAsync = async () => {
+  public _loadResourcesAsync = async () => {
     return Promise.all([
       Asset.loadAsync([
         require('../assets/images/robot-dev.png'),
@@ -43,20 +77,22 @@ export default class App extends React.Component {
     ]);
   };
 
-  _handleLoadingError = (error: Error) => {
+  public _handleLoadingError = (error: Error) => {
     // In this case, you might want to report the error to your error
     // reporting service, for example Sentry
     console.warn(error);
   };
 
-  _handleFinishLoading = () => {
+  public _handleFinishLoading = () => {
     this.setState({ isLoadingComplete: true });
   };
 }
 
+export default withAuthenticator(App, { includeGreetings: false, signUpConfig }, [], null, MyTheme);
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     backgroundColor: '#fff',
+    flex: 1,
   },
 });
