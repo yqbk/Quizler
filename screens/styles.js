@@ -9,6 +9,22 @@ export const styles = StyleSheet.create({
     paddingVertical:30,
   },
 
+  input: {
+    marginVertical: 10,
+    borderWidth: 1,
+  },
+
+  lesson: {
+    borderWidth: 3,
+    marginHorizontal: 15,
+  },
+
+  header: {
+    fontWeight: "900",
+    fontSize: 32,
+
+  },
+
   card: {
     flex: 1,
     borderRadius: 4,

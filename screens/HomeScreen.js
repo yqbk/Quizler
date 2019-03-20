@@ -1,21 +1,106 @@
 import React from 'react';
-import { Image, ScrollView, Text, TouchableOpacity, View, Button } from 'react-native';
+import { Image, ScrollView, Text, TouchableOpacity, View, Button, TextInput } from 'react-native';
 import { WebBrowser } from 'expo';
 import Swiper from 'react-native-deck-swiper';
 import FlipCard from 'react-native-flip-card';
 
+import Amplify from '@aws-amplify/core';
+import config from '../aws-exports';
+Amplify.configure(config);
+import API, { graphqlOperation } from '@aws-amplify/api';
+
 import { MonoText } from '../components/StyledText';
 import { styles } from './styles';
+import { listLessons } from '../src/graphql/queries';
+import { createLesson } from '../src/graphql/mutations';
+
+//GraphQL endpoint: https://y6uictkyarb4fijwsxohb7m27a.appsync-api.eu-west-1.amazonaws.com/graphql
+// GraphQL API KEY: da2-fbwifqmisrgpxi5rxop2niu2ue
+
+// const listLessons = `
+//   query {
+//     listLesson {
+//       items {
+//         id
+//         title
+//         questions
+//       }
+//     }
+//  }
+// `;
+// const createLesson = `
+//   mutation($title: String!) {
+//     createLesson(input: {
+//       title: $title
+//   }) {
+//     id
+//     title
+//   }
+// }`;
 
 export default class HomeScreen extends React.Component {
   static navigationOptions = {
-    header: null,
+    // header: null,
+  };
+
+  state = {
+    lessons: [],
+    title: '',
+  };
+
+  async componentDidMount() {
+    try {
+      const graphqldata = await API.graphql(graphqlOperation(listLessons));
+      console.log('graphqldata:', graphqldata);
+      this.setState({ lessons: graphqldata.data.listLessons.items });
+    } catch (err) {
+      console.log('error: ', err);
+    }
+  }
+
+  onChangeText = (key, val) => {
+    this.setState({ [key]: val });
+  };
+
+  addLesson = async () => {
+    const lessonTitle = this.state.title;
+
+    console.log('1. lessonTitle', lessonTitle);
+
+    if (lessonTitle === '') return;
+
+    const lessons = [...this.state.lessons, { title: lessonTitle }];
+
+    console.log('2. state', this.state);
+
+    this.setState({ lessons, title: '' });
+    try {
+      await API.graphql(graphqlOperation(createLesson, { input: { title: lessonTitle } }));
+      console.log('lesson successfully created.');
+    } catch (err) {
+      console.log('error creating lesson...', err);
+    }
   };
 
   render() {
     return (
       <View style={styles.container}>
-      <Text>Lessons</Text>
+        <TextInput
+          style={styles.input}
+          onChangeText={val => this.onChangeText('title', val)}
+          placeholder="Lesson Name"
+          value={this.state.title}
+        />
+
+        <Button onPress={this.addLesson} title="Add Lesson!" />
+
+        <Text style={styles.header}>Lessons</Text>
+
+        {this.state.lessons.map((lesson, index) => (
+          <View key={index} style={styles.lesson}>
+            <Text style={styles.lessonTitle}>{lesson.title}</Text>
+          </View>
+        ))}
         {/* <Swiper
           cards={['DO', 'MORE', 'OF', 'WHAT', 'MAKES', 'YOU', 'HAPPY']}
           marginBottom={100}
