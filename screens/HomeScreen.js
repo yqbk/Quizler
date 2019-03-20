@@ -15,7 +15,8 @@ export default class HomeScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Swiper
+      <Text>Lessons</Text>
+        {/* <Swiper
           cards={['DO', 'MORE', 'OF', 'WHAT', 'MAKES', 'YOU', 'HAPPY']}
           marginBottom={100}
           marginTop={80}
@@ -33,13 +34,13 @@ export default class HomeScreen extends React.Component {
                   onFlipped={isFlipped => {}}
                 >
                   <View style={styles.face}>
-                    {/* <Text style={styles.text}>{card.question}</Text> */}
+                    <Text style={styles.text}>{card.question}</Text>
                     <Text style={styles.text}>A</Text>
                   </View>
 
                   <View style={styles.back}>
                     <Text style={styles.text}>B</Text>
-                    {/* {!this.state.completed && (
+                    {!this.state.completed && (
                       <View>
                         <Text style={styles.smallText}>
                           If you know the answer swipe the card to the
@@ -51,7 +52,7 @@ export default class HomeScreen extends React.Component {
                           <Text style={{ color: 'red' }}>left.</Text>
                         </Text>
                       </View>
-                    )} */}
+                    )}
                   </View>
                 </FlipCard>
               </View>
@@ -66,7 +67,7 @@ export default class HomeScreen extends React.Component {
           cardIndex={0}
           backgroundColor={'white'}
           stackSize={3}
-        />
+        /> */}
         {/* <View style={{ height: 150, borderWidth: 3 }} /> */}
       </View>
     );
