@@ -1,0 +1,20 @@
+{
+    "appName": "quizler",
+    "roleName": "pinpointLambdaRole66c360eb",
+    "cloudWatchPolicyName": "cloudWatchPolicy66c360eb",
+    "pinpointPolicyName": "pinpointPolicy66c360eb",
+    "authPolicyName": "pinpoint_amplify_66c360eb",
+    "unauthPolicyName": "pinpoint_amplify_66c360eb",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "authRoleArn": {
+        "Fn::GetAtt": [
+            "AuthRole",
+            "Arn"
+        ]
+    }
+}

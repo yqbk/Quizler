@@ -4,6 +4,7 @@ import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import AppNavigator from '../navigation/AppNavigator.js';
 
 import Auth from '@aws-amplify/auth';
+import Analytics from '@aws-amplify/analytics';
 import { withAuthenticator } from 'aws-amplify-react-native';
 import awsconfig from '../aws-exports';
 import { MyTheme } from './AuthConfig';
@@ -25,6 +26,12 @@ class App extends React.Component {
     authCode: '',
     user: {},
   };
+
+  // store user info in the state
+  async componentDidMount() {
+    const user = await Auth.currentAuthenticatedUser();
+    this.setState({ user });
+  }
 
   public async signUp() {
     const { username, password, email } = this.state;
@@ -85,6 +92,12 @@ class App extends React.Component {
 
   public _handleFinishLoading = () => {
     this.setState({ isLoadingComplete: true });
+
+    // here?
+    Analytics.record({
+      name: 'Button Clicked',
+      attributes: { username: this.state.user.username },
+    });
   };
 }
 

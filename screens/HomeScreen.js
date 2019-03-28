@@ -8,14 +8,12 @@ import Amplify from '@aws-amplify/core';
 import config from '../aws-exports';
 Amplify.configure(config);
 import API, { graphqlOperation } from '@aws-amplify/api';
+import Analytics from '@aws-amplify/analytics';
 
 import { MonoText } from '../components/StyledText';
 import { styles } from './styles';
 import { listLessons } from '../src/graphql/queries';
 import { createLesson } from '../src/graphql/mutations';
-
-//GraphQL endpoint: https://y6uictkyarb4fijwsxohb7m27a.appsync-api.eu-west-1.amazonaws.com/graphql
-// GraphQL API KEY: da2-fbwifqmisrgpxi5rxop2niu2ue
 
 // const listLessons = `
 //   query {
@@ -50,9 +48,9 @@ export default class HomeScreen extends React.Component {
 
   async componentDidMount() {
     try {
-      const graphqldata = await API.graphql(graphqlOperation(listLessons));
-      console.log('graphqldata:', graphqldata);
-      this.setState({ lessons: graphqldata.data.listLessons.items });
+      const graphqlData = await API.graphql(graphqlOperation(listLessons));
+      console.log('graphqldata:', graphqlData);
+      this.setState({ lessons: graphqlData.data.listLessons.items });
     } catch (err) {
       console.log('error: ', err);
     }
@@ -77,6 +75,12 @@ export default class HomeScreen extends React.Component {
     try {
       await API.graphql(graphqlOperation(createLesson, { input: { title: lessonTitle } }));
       console.log('lesson successfully created.');
+      Analytics.record({
+        name: 'Lesson created',
+        attributes: {
+          lessonTitle: lessonTitle,
+        },
+      });
     } catch (err) {
       console.log('error creating lesson...', err);
     }

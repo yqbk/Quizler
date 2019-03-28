@@ -13,5 +13,11 @@
 				"securityType": "API_KEY"
 			}
 		}
+	},
+	"analytics": {
+		"quizler": {
+			"service": "Pinpoint",
+			"providerPlugin": "awscloudformation"
+		}
 	}
 }
