@@ -1,0 +1,17 @@
+type User @model {
+  id: ID!
+  name: String!
+  lessons: [Lesson] @connection(name: "UserLessons")
+}
+type Lesson @model {
+  id: ID!
+  title: String!
+  user: User @connection(name: "UserLessons")
+  questions: [Question] @connection(name: "LessonQuestions")
+}
+type Question @model {
+  id: ID!
+  ask: String
+  answer: String
+  lesson: Lesson @connection(name: "LessonQuestions")
+}

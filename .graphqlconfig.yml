@@ -1,0 +1,16 @@
+projects:
+  quizler:
+    schemaPath: src/graphql/schema.json
+    includes:
+      - src/graphql/**/*.ts
+    excludes:
+      - ./amplify/**
+    extensions:
+      amplify:
+        codeGenTarget: typescript
+        generatedFileName: src/API.ts
+        docsFilePath: src/graphql
+        graphQLApiId: vhqrbnkgvjcsvd6vbih3tjinmi
+      endpoints:
+        prod: >-
+          https://y6uictkyarb4fijwsxohb7m27a.appsync-api.eu-west-1.amazonaws.com/graphql

@@ -9,6 +9,11 @@
             "UnauthRoleName": "quizler-20190307112411-unauthRole",
             "StackName": "quizler-20190307112411",
             "StackId": "arn:aws:cloudformation:eu-west-1:812462004596:stack/quizler-20190307112411/26600c60-40c3-11e9-b395-06982f8c16e4"
+        },
+        "categories": {
+            "auth": {
+                "cognitoe12e5894": {}
+            }
         }
     }
 }

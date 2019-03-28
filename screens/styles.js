@@ -2,10 +2,27 @@ import { Platform, StyleSheet } from 'react-native';
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
+    
     backgroundColor: '#fff',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingBottom: 150,
+    paddingVertical:30,
+  },
+
+  input: {
+    marginVertical: 10,
+    borderWidth: 1,
+  },
+
+  lesson: {
+    borderWidth: 3,
+    marginHorizontal: 15,
+  },
+
+  header: {
+    fontWeight: "900",
+    fontSize: 32,
+
   },
 
   card: {
