@@ -68,42 +68,10 @@ export default class HomeScreen extends React.Component {
     }
   }
 
-  onChangeText = (key, val) => {
-    this.setState({ [key]: val });
-  };
-
-  addLesson = async () => {
-    const lessonTitle = this.state.title;
-
-    console.log('1. lessonTitle', lessonTitle);
-
-    if (lessonTitle === '') return;
-
-    const lessons = [...this.state.lessons, { title: lessonTitle }];
-
-    console.log('2. state', this.state);
-
-    this.setState({ lessons, title: '' });
-    try {
-      await API.graphql(graphqlOperation(createLesson, { input: { title: lessonTitle } }));
-      console.log('lesson successfully created.');
-      Analytics.record({
-        name: 'Lesson created',
-        attributes: {
-          lessonTitle: lessonTitle,
-        },
-      });
-    } catch (err) {
-      console.log('error creating lesson...', err);
-    }
-  };
-
-  _keyExtractor = (item, index) => item.id;
-
   render() {
     return (
       <FlatList
-        data={[...this.state.lessons, { isNew: true }]}
+        data={[{ isNew: true }, ...this.state.lessons]}
         keyExtractor={this._keyExtractor}
         renderItem={({ item }) =>
           console.log('1.', item, this.state.lessons) || (
@@ -112,18 +80,10 @@ export default class HomeScreen extends React.Component {
               isNew={item.isNew}
               onPress={() => {
                 Alert.alert(
-                  'Alert Title',
-                  'My Alert Msg',
-                  [
-                    { text: 'Ask me later', onPress: () => console.log('Ask me later pressed') },
-                    {
-                      text: 'Cancel',
-                      onPress: () => console.log('Cancel Pressed'),
-                      style: 'cancel',
-                    },
-                    { text: 'OK', onPress: () => console.log('OK Pressed') },
-                  ],
-                  { cancelable: false }
+                  'Lesson name',
+                  item.title,
+                  [{ text: 'Go to lesson!', onPress: () => console.log('Ask me later pressed') }],
+                  { cancelable: true }
                 );
               }}
             />

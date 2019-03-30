@@ -1,9 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
+import {
+  Image,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  Button,
+  TextInput,
+  Alert,
+  FlatList,
+} from 'react-native';
+import NewLesson from './NewLesson';
 
 const Lesson = ({ lessonName, onPress, isNew }) => (
   <LessonWrapper onPress={onPress} isNew={isNew}>
-    <LessonTitle>{isNew ? '+' : lessonName}</LessonTitle>
+    {
+        isNew ? 
+    <NewLesson /> : 
+    <LessonTitle>{lessonName || 'empty'}</LessonTitle>
+    }
+    {/* <LessonTitle>{lessonName || 'test'}</LessonTitle> */}
   </LessonWrapper>
 );
 
@@ -17,7 +34,7 @@ const LessonWrapper = styled.TouchableOpacity`
   justify-content: center;
   border-radius: 5px;
 
-  background: ${props => (props.isNew ? `#000000ae` : `white`)};
+  /* background: ${props => (props.isNew ? `#000000ae` : `white`)}; */
 `;
 
 const LessonTitle = styled.Text`
