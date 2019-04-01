@@ -1,9 +1,9 @@
 {
-  "devToolsPort": 19003,
+  "devToolsPort": 19002,
   "expoServerPort": 19000,
-  "packagerPort": 19001,
-  "packagerPid": 31290,
+  "packagerPort": 19003,
+  "packagerPid": 22163,
   "expoServerNgrokUrl": "https://h2-gjq.yqbk.quizler-expo-ts.exp.direct",
   "packagerNgrokUrl": "https://packager.h2-gjq.yqbk.quizler-expo-ts.exp.direct",
-  "ngrokPid": 31304
+  "ngrokPid": 22202
 }

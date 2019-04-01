@@ -1,7 +1,9 @@
+import React, { Component } from 'react';
+import { Provider } from 'react-redux';
 import { AppLoading, Asset, Font, Icon } from 'expo';
-import React from 'react';
 import { Platform, StatusBar, StyleSheet, View } from 'react-native';
 import AppNavigator from '../navigation/AppNavigator.js';
+import createStore from '../state';
 
 import Auth from '@aws-amplify/auth';
 import Analytics from '@aws-amplify/analytics';
@@ -15,6 +17,8 @@ Auth.configure(awsconfig);
 const signUpConfig: any = {
   hiddenDefaults: ['phone_number'],
 };
+
+const store = createStore();
 
 class App extends React.Component {
   public state = {
@@ -49,7 +53,7 @@ class App extends React.Component {
     console.log('confirm sign up successful!');
   }
 
-  public render() {
+  public renderApp = () => {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
@@ -66,6 +70,10 @@ class App extends React.Component {
         </View>
       );
     }
+  };
+
+  public render() {
+    return <Provider store={store}>{this.renderApp()}</Provider>;
   }
 
   public _loadResourcesAsync = async () => {
