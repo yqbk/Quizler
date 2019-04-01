@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": 19000,
-  "packagerPort": 19003,
-  "packagerPid": 27274,
-  "expoServerNgrokUrl": "https://h2-gjq.anonymous.quizler-expo-ts.exp.direct",
-  "packagerNgrokUrl": "https://packager.h2-gjq.anonymous.quizler-expo-ts.exp.direct",
-  "ngrokPid": 27295
+  "expoServerPort": null,
+  "packagerPort": null,
+  "packagerPid": null,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null
 }
