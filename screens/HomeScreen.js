@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import {
   Image,
   ScrollView,
@@ -13,6 +14,8 @@ import {
 import { WebBrowser } from 'expo';
 import Swiper from 'react-native-deck-swiper';
 import FlipCard from 'react-native-flip-card';
+
+import LessonsActions from '../state/lessonsReducer';
 
 import Amplify from '@aws-amplify/core';
 import config from '../aws-exports';
@@ -47,7 +50,7 @@ import Lesson from '../components/Lesson';
 //   }
 // }`;
 
-export default class HomeScreen extends React.Component {
+class HomeScreen extends React.Component {
   static navigationOptions = {
     // header: null,
     title: 'Lessons',
@@ -59,40 +62,61 @@ export default class HomeScreen extends React.Component {
   };
 
   async componentDidMount() {
-    try {
-      const graphqlData = await API.graphql(graphqlOperation(listLessons));
-      console.log('graphqldata:', graphqlData);
-      this.setState({ lessons: graphqlData.data.listLessons.items });
-    } catch (err) {
-      console.log('error: ', err);
-    }
+    this.props.getLessons();
   }
 
   render() {
+    // console.log('test', this.props.lessons);
+    let lekcje = null;
+    if (this.props.lessons && this.props.lessons.length) {
+      lekcje = this.props.lessons.filter(item => item.id && item.title);
+      lekcje.map(lekcja => console.log(lekcja.title));
+    }
+
+
     return (
-      <FlatList
-        data={[{ isNew: true }, ...this.state.lessons]}
-        keyExtractor={this._keyExtractor}
-        renderItem={({ item }) =>
-          console.log('1.', item, this.state.lessons) || (
-            <Lesson
-              lessonName={item.title}
-              isNew={item.isNew}
-              onPress={() => {
-                Alert.alert(
-                  'Lesson name',
-                  item.title,
-                  [{ text: 'Go to lesson!', onPress: () => console.log('Ask me later pressed') }],
-                  { cancelable: true }
-                );
-              }}
-            />
-          )
-        }
-      />
+      <View>
+        {lekcje && lekcje.length && (
+          <FlatList
+            data={[{ isNew: true }, ...lekcje]}
+            keyExtractor={this._keyExtractor}
+            renderItem={({ item }) => (
+              <Lesson
+                lessonName={item.title}
+                isNew={item.isNew}
+                onPress={() => {
+                  Alert.alert(
+                    'Lesson name',
+                    item.title,
+                    [{ text: 'Go to lesson!', onPress: () => console.log('Ask me later pressed') }],
+                    { cancelable: true }
+                  );
+                }}
+              />
+            )}
+          />
+        )}
+      </View>
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    lessons: state.lessons.lessons,
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    getLessons: () => dispatch(LessonsActions.getLessonsRequest('test payload')),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(HomeScreen);
 
 //  // <View style={styles.container}>
 //       //   <Text style={styles.header}>Lessons</Text>

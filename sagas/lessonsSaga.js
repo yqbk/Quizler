@@ -1,18 +1,23 @@
 import { call, put } from 'redux-saga/effects';
 import LessonsActions from '../state/lessonsReducer';
+import API, { graphqlOperation } from '@aws-amplify/api';
+import { listLessons } from '../src/graphql/queries';
 
-export function* getLessonsFlow(api, action) {
+export function* getLessonsFlow() {
   try {
-    console.log('1. get lessons');
-    // const response = yield call(api.getCocktails);
+    const operation = graphqlOperation(listLessons);
+    const test = () => API.graphql(operation);
 
-    // console.log('2. response', response);
+    const graphqlData = yield call(test);
 
-    // if (response.ok) {
-    //   yield put(CocktailsActions.getCocktailsSuccess(response.data.drinks));
-    // } else {
-    //   yield put(CocktailsActions.getCocktailsFailure('Connection problems :('));
-    // }
+    const response = graphqlData.data;
+
+
+    if (response) {
+      yield put(LessonsActions.getLessonsSuccess(response.listLessons.items));
+    } else {
+      yield put(LessonsActions.getLessonsFailure('Connection problems :('));
+    }
   } catch (error) {
     yield put(LessonsActions.getLessonsFailure(error.message));
   }

@@ -1,25 +1,34 @@
-import { createStore, applyMiddleware, compose } from 'redux'
-import createSagaMiddleware from 'redux-saga'
+import { createStore, applyMiddleware, compose } from 'redux';
+import createSagaMiddleware from 'redux-saga';
 
 // creates the store
 export default (rootReducer, rootSaga) => {
-    /* ------------- Redux Configuration ------------- */
+  /* ------------- Redux Configuration ------------- */
 
-    const middleware = []
-    const enhancers = []
+  const middleware = [];
+  const enhancers = [];
 
-    /* ------------- Saga Middleware ------------- */
-    const sagaMiddleware = createSagaMiddleware()
-    middleware.push(sagaMiddleware)
+  /* ------------- Saga Middleware ------------- */
+  const sagaMiddleware = createSagaMiddleware();
+  middleware.push(sagaMiddleware);
 
-    /* ------------- Assemble Middleware ------------- */
-    enhancers.push(applyMiddleware(...middleware))
+  /* ------------- Assemble Middleware ------------- */
+  enhancers.push(applyMiddleware(...middleware));
 
-    const createAppropriateStore = createStore
-    const store = createAppropriateStore(rootReducer, compose(...enhancers))
+  if (window.__REDUX_DEVTOOLS_EXTENSION__) {
+    enhancers.push(window.__REDUX_DEVTOOLS_EXTENSION__());
+  }
 
-    // kick off root saga
-    sagaMiddleware.run(rootSaga)
+  const createAppropriateStore = createStore;
+  /* eslint-disable no-underscore-dangle */
+  const store = createAppropriateStore(
+    rootReducer,
+    compose(...enhancers)
+  );
+  /* eslint-enable */
 
-    return store
-}
+  // kick off root saga
+  sagaMiddleware.run(rootSaga);
+
+  return store;
+};

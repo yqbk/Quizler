@@ -53,7 +53,7 @@ class App extends React.Component {
     console.log('confirm sign up successful!');
   }
 
-  public renderApp = () => {
+  public render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
         <AppLoading
@@ -66,14 +66,12 @@ class App extends React.Component {
       return (
         <View style={styles.container}>
           {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppNavigator />
+          <Provider store={store}>
+            <AppNavigator />
+          </Provider>
         </View>
       );
     }
-  };
-
-  public render() {
-    return <Provider store={store}>{this.renderApp()}</Provider>;
   }
 
   public _loadResourcesAsync = async () => {

@@ -1,4 +1,4 @@
-import { takeLatest } from 'redux-saga/effects';
+import { all, takeEvery } from 'redux-saga/effects';
 // import API from '../Services/Api'
 
 /* ------------- Types ------------- */
@@ -12,8 +12,5 @@ import { getLessonsFlow } from './lessonsSaga';
 
 /* ------------- Connect Types To Sagas ------------- */
 export default function* root() {
-  yield [
-    // takeLatest(CocktailsTypes.GET_COCKTAILS_REQUEST, getLessonsFlow, api),
-    takeLatest(LessonsTypes.GET_LESSONS_REQUEST, getLessonsFlow),
-  ];
+  yield all([yield takeEvery(LessonsTypes.GET_LESSONS_REQUEST, getLessonsFlow)]);
 }
