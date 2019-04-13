@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+
 import {
   Image,
   ScrollView,
@@ -28,6 +29,7 @@ import { styles } from './styles';
 import { listLessons } from '../src/graphql/queries';
 import { createLesson } from '../src/graphql/mutations';
 import Lesson from '../components/Lesson';
+import { lessonsSelector } from '../containers/lessons/selector';
 
 // const listLessons = `
 //   query {
@@ -66,7 +68,7 @@ class HomeScreen extends React.Component {
   }
 
   render() {
-    // console.log('test', this.props.lessons);
+    console.log('=> ', this.props.lessons);
     let lekcje = null;
     if (this.props.lessons && this.props.lessons.length) {
       lekcje = this.props.lessons.filter(item => item.id && item.title);
@@ -103,11 +105,9 @@ class HomeScreen extends React.Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    lessons: state.lessons.lessons,
-  };
-};
+const mapStateToProps = state => ({
+  lessons: lessonsSelector(state),
+});
 
 const mapDispatchToProps = dispatch => {
   return {
