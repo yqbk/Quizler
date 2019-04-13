@@ -73,7 +73,6 @@ class HomeScreen extends React.Component {
       lekcje.map(lekcja => console.log(lekcja.title));
     }
 
-
     return (
       <View>
         {lekcje && lekcje.length && (
@@ -85,12 +84,15 @@ class HomeScreen extends React.Component {
                 lessonName={item.title}
                 isNew={item.isNew}
                 onPress={() => {
-                  Alert.alert(
-                    'Lesson name',
-                    item.title,
-                    [{ text: 'Go to lesson!', onPress: () => console.log('Ask me later pressed') }],
-                    { cancelable: true }
-                  );
+                  this.props.navigation.navigate('Lesson', {
+                    lesson: item,
+                  });
+                  // Alert.alert(
+                  //   'Lesson name',
+                  //   item.title,
+                  //   [{ text: 'Go to lesson!', onPress: () => console.log('Ask me later pressed') }],
+                  //   { cancelable: true }
+                  // );
                 }}
               />
             )}

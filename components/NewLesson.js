@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import {
   Image,
@@ -12,51 +13,54 @@ import {
   FlatList,
 } from 'react-native';
 
+import LessonsActions from '../state/lessonsReducer';
+
 import Amplify from '@aws-amplify/core';
 import config from '../aws-exports';
 Amplify.configure(config);
 import API, { graphqlOperation } from '@aws-amplify/api';
 import { createLesson } from '../src/graphql/mutations';
 import Analytics from '@aws-amplify/analytics';
-
-export default class NewLesson extends React.Component {
+class NewLesson extends React.Component {
   state = {
     lessons: [],
     title: '',
   };
 
-  addLesson = async () => {
-    const lessonTitle = this.state.title;
+  // addLesson = async () => {
+  //   const lessonTitle = this.state.title;
 
-    console.log('1. lessonTitle', lessonTitle);
+  //   console.log('1. lessonTitle', lessonTitle);
 
-    if (lessonTitle === '') return;
+  //   if (lessonTitle === '') return;
 
-    const lessons = [...this.state.lessons, { title: lessonTitle }];
+  //   const lessons = [...this.state.lessons, { title: lessonTitle }];
 
-    console.log('2. state', this.state);
+  //   console.log('2. state', this.state);
 
-    this.setState({ lessons, title: '' });
-    try {
-      await API.graphql(graphqlOperation(createLesson, { input: { title: lessonTitle } }));
+  //   this.setState({ lessons, title: '' });
+  //   try {
+  //     await API.graphql(graphqlOperation(createLesson, { input: { title: lessonTitle } }));
 
-      console.log('lesson successfully created.');
-      Analytics.record({
-        name: 'Lesson created',
-        attributes: {
-          lessonTitle: lessonTitle,
-        },
-      });
-    } catch (err) {
-      console.log('error creating lesson...', err);
-    }
-  };
+  //     console.log('lesson successfully created.');
+  //     Analytics.record({
+  //       name: 'Lesson created',
+  //       attributes: {
+  //         lessonTitle: lessonTitle,
+  //       },
+  //     });
+  //   } catch (err) {
+  //     console.log('error creating lesson...', err);
+  //   }
+  // };
 
   onChangeText = (key, val) => {
     this.setState({ [key]: val });
   };
 
   render() {
+    // console.log('this.props', this.props);
+
     return (
       <NewLessonWrapper>
         <NewLessonInput
@@ -64,11 +68,26 @@ export default class NewLesson extends React.Component {
           onChangeText={val => this.onChangeText('title', val)}
           value={this.state.title}
         />
-        <NewLessonButton onPress={this.addLesson} title="Add Lesson!" size={'small'} />
+        <NewLessonButton
+          onPress={() => this.props.addLesson(this.state.title)}
+          title="Add Lesson!"
+          size={'small'}
+        />
       </NewLessonWrapper>
     );
   }
 }
+
+const mapDispatchToProps = dispatch => {
+  return {
+    addLesson: title => dispatch(LessonsActions.addLessonRequest(title)),
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(NewLesson);
 
 const NewLessonWrapper = styled.View`
   align-items: center;
