@@ -21,6 +21,7 @@ Amplify.configure(config);
 import API, { graphqlOperation } from '@aws-amplify/api';
 import { createLesson } from '../src/graphql/mutations';
 import Analytics from '@aws-amplify/analytics';
+import { bindActionCreators } from '../utils/reduxUtils';
 class NewLesson extends React.Component {
   state = {
     lessons: [],
@@ -78,11 +79,9 @@ class NewLesson extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    addLesson: title => dispatch(LessonsActions.addLessonRequest(title)),
-  };
-};
+const mapDispatchToProps = bindActionCreators({
+  addLesson: title => LessonsActions.addLessonRequest(title),
+});
 
 export default connect(
   null,
