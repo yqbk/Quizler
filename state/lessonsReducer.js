@@ -11,8 +11,8 @@ const { Types, Creators } = createActions({
   addLessonSuccess: ['response'],
   addLessonFailure: ['error'],
 
-  removeLessonRequest: ['title'],
-  removeLessonSuccess: ['response'],
+  removeLessonRequest: ['id'],
+  removeLessonSuccess: ['id'],
   removeLessonFailure: ['error'],
 });
 
@@ -45,7 +45,6 @@ export const getLessonsFailure = (state, action) => {
 // ----
 
 export const addLessonRequest = (state, action) => {
-  const { tipo } = action;
   return state.merge({ fetching: true, error: false, errorMessage: '' });
 };
 
@@ -65,12 +64,16 @@ export const addLessonFailure = (state, action) => {
 // ----
 
 export const removeLessonRequest = (state, action) => {
-  const { tipo } = action;
   return state.merge({ fetching: true, error: false, errorMessage: '' });
 };
 
 export const removeLessonSuccess = (state, action) => {
-  return state.merge({ fetching: false, error: false, errorMessage: '', lessons: action.response });
+  return state.merge({
+    fetching: false,
+    error: false,
+    errorMessage: '',
+    lessons: state.lessons.filter(lesson => lesson.id !== action.id),
+  });
 };
 
 export const removeLessonFailure = (state, action) => {

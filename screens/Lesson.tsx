@@ -17,7 +17,7 @@ import {
   FlatList,
 } from 'react-native';
 
-
+import LessonsActions from '../state/lessonsReducer'
 import { removeLessonRequest } from '../state/lessonsReducer';
 import { bindActionCreators } from '../utils/reduxUtils';
 
@@ -67,7 +67,7 @@ const LessonScrollView = styled.ScrollView`
 
 
 const mapDispatchToProps = bindActionCreators({
-  removeLesson: title => removeLessonRequest(title),
+  removeLesson: title => LessonsActions.removeLessonRequest(title),
 });
 
 export default compose(

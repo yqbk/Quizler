@@ -2,7 +2,8 @@ import { call, put } from 'redux-saga/effects';
 import LessonsActions from '../state/lessonsReducer';
 import API, { graphqlOperation } from '@aws-amplify/api';
 import { listLessons } from '../src/graphql/queries';
-import { createLesson } from '../src/graphql/mutations';
+import { createLesson, deleteLesson } from '../src/graphql/mutations';
+import { goBack } from '../utils/actions';
 
 export function* getLessonsFlow() {
   try {
@@ -25,50 +26,12 @@ export function* getLessonsFlow() {
 
 export function* addLessonFlow({ title }) {
   try {
-    console.log('title', title);
-
-    // addLesson = async () => {
-    //   const lessonTitle = this.state.title;
-
-    //   console.log('1. lessonTitle', lessonTitle);
-
-    //   if (lessonTitle === '') return;
-
-    //   const lessons = [...this.state.lessons, { title: lessonTitle }];
-
-    //   console.log('2. state', this.state);
-
-    //   this.setState({ lessons, title: '' });
-    //   try {
-    // await API.graphql(graphqlOperation(createLesson, { input: { title: lessonTitle } }));
-
     const operation = graphqlOperation(createLesson, { input: { title: title } });
     const addLessonApi = () => API.graphql(operation);
 
     const graphqlData = yield call(addLessonApi);
 
     const response = graphqlData.data;
-
-    console.log('response', response);
-
-    //     console.log('lesson successfully created.');
-    //     Analytics.record({
-    //       name: 'Lesson created',
-    //       attributes: {
-    //         lessonTitle: lessonTitle,
-    //       },
-    //     });
-    //   } catch (err) {
-    //     console.log('error creating lesson...', err);
-    //   }
-    // };
-
-    // const operation = graphqlOperation(listLessons);
-    // const test = () => API.graphql(operation);
-
-    // const graphqlData = yield call(test);
-
-    // const response = graphqlData.data;
 
     if (response) {
       yield put(LessonsActions.addLessonSuccess(response));
@@ -80,50 +43,24 @@ export function* addLessonFlow({ title }) {
   }
 }
 
-export function* removeLessonFlow(data) {
+export function* removeLessonFlow({ id }) {
   try {
-    console.log('data', data);
+    console.log('lessonId', id);
 
-    // addLesson = async () => {
-    //   const lessonTitle = this.state.title;
+    const operation = graphqlOperation(deleteLesson, { input: { id: id } });
+    const removeLessonApi = () => API.graphql(operation);
 
-    //   console.log('1. lessonTitle', lessonTitle);
+    const graphqlData = yield call(removeLessonApi);
 
-    //   if (lessonTitle === '') return;
+    const deletedLessonId = graphqlData.data.deleteLesson.id;
 
-    //   const lessons = [...this.state.lessons, { title: lessonTitle }];
-
-    //   console.log('2. state', this.state);
-
-    //   this.setState({ lessons, title: '' });
-    //   try {
-    //     await API.graphql(graphqlOperation(createLesson, { input: { title: lessonTitle } }));
-
-    //     console.log('lesson successfully created.');
-    //     Analytics.record({
-    //       name: 'Lesson created',
-    //       attributes: {
-    //         lessonTitle: lessonTitle,
-    //       },
-    //     });
-    //   } catch (err) {
-    //     console.log('error creating lesson...', err);
-    //   }
-    // };
-
-    // const operation = graphqlOperation(listLessons);
-    // const test = () => API.graphql(operation);
-
-    // const graphqlData = yield call(test);
-
-    // const response = graphqlData.data;
-
-    // if (response) {
-    yield put(LessonsActions.addLessonSuccess(data));
-    // } else {
-    //   yield put(LessonsActions.getLessonsFailure('Connection problems :('));
-    // }
+    if (deletedLessonId) {
+      yield put(LessonsActions.removeLessonSuccess(deletedLessonId));
+      yield put(goBack(null));
+    } else {
+      yield put(LessonsActions.removeLessonFailure(`Remove lesson failure: ${id}`));
+    }
   } catch (error) {
-    yield put(LessonsActions.addLessonFailure(error.message));
+    yield put(LessonsActions.removeLessonFailure(error.message));
   }
 }
