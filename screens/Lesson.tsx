@@ -1,48 +1,13 @@
 import React from 'react';
 
-import { compose } from 'recompose';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 
+import { Text, Button, View } from 'react-native';
 import styled from 'styled-components';
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  Image,
-  TouchableOpacity,
-  View,
-  Button,
-  TextInput,
-  Alert,
-  FlatList,
-} from 'react-native';
 
-import LessonsActions from '../state/lessonsReducer'
-import { removeLessonRequest } from '../state/lessonsReducer';
+import LessonsActions from '../state/lessonsReducer';
 import { bindActionCreators } from '../utils/reduxUtils';
-
-// export default class LessonScreen extends React.Component {
-//   static navigationOptions = {
-//     title: 'Lesson',
-//   };
-
-//   render() {
-//     const { title, ...rest } = this.props.navigation.getParam('lesson');
-
-//     console.log('-> lesson', title, rest);
-
-//     return (
-//       <LessonScrollView>
-//         <View style={{ flex: 1, flexDirection: 'column', borderWidth: 2, paddingBottom: 32 }}>
-//           <Text> {title} </Text>
-//           <Text> {title} </Text>
-//           <Text> {title} </Text>
-//         </View>
-//         <Button color="red" title=" Delete lesson " onPress={() => console.log('Delete lesson')} />
-//       </LessonScrollView>
-//     );
-//   }
-// }
 
 const LessonScreen = ({ navigation, removeLesson }) => {
   console.log('navigation?', navigation);
@@ -64,7 +29,6 @@ const LessonScrollView = styled.ScrollView`
   flex: 1;
   padding-top: 15;
 `;
-
 
 const mapDispatchToProps = bindActionCreators({
   removeLesson: title => LessonsActions.removeLessonRequest(title),
