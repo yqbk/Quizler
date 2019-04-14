@@ -3,18 +3,11 @@ import CardsActions from './actions';
 import API, { graphqlOperation } from '@aws-amplify/api';
 import { listQuestions, listQuestionsByTitle, getLesson } from '../..//src/graphql/queries';
 import { createQuestion } from '../../src/graphql/mutations';
-// import console = require('console');
-// import { goBack } from '../utils/actions';
 
 export function* getCardsFlow({ lessonID }) {
   try {
-    console.log('lessonId', lessonID);
-    // const operation = graphqlOperation(listQuestionsByTitle(title));
     const operation = graphqlOperation(getLesson, { id: lessonID });
-
-    console.log('operation', operation);
     const test = () => API.graphql(operation);
-
     const graphqlData = yield call(test);
 
     const response = graphqlData.data;

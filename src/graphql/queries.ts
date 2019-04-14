@@ -113,26 +113,3 @@ export const listQuestions = `query ListQuestions(
   }
 }
 `;
-
-// export const createLesson = `mutation CreateLesson($input: CreateLessonInput!) {
-//   createLesson(input: $input) {
-//     id
-//     title
-//     user {
-//       id
-//       name
-//       lessons {
-//         nextToken
-//       }
-//     }
-//     questions {
-//       items {
-//         id
-//         ask
-//         answer
-//       }
-//       nextToken
-//     }
-//   }
-// }
-// `;

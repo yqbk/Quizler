@@ -11,19 +11,9 @@ import CardsActions from '../containers/cards/actions';
 import { bindActionCreators } from '../utils/reduxUtils';
 
 const LessonScreen = ({ navigation, removeLesson, cards, getCards, addCard }) => {
-  // console.log('navigation?', navigation);
-
   const { title, id, ...rest } = navigation.getParam('lesson');
 
-  // console.log('=> ', this.props.lessons);
-  // let lekcje = null;
-
   console.log('cards', cards);
-
-  // if (this.props.lessons && this.props.lessons.length) {
-  //   lekcje = this.props.lessons.filter(item => item.id && item.title);
-  //   lekcje.map(lekcja => console.log(lekcja.title));
-  // }
 
   return (
     <LessonView>
@@ -74,6 +64,7 @@ export default compose(
     mapDispatchToProps
   ),
   // withProps(({ closeDialog }) => ({
+  // TODO SELECTOR?
   //   timeout: () => {
   //     closeDialog();
   //   },
@@ -83,13 +74,7 @@ export default compose(
       const { title, id, ...rest } = this.props.navigation.getParam('lesson');
 
       console.log('lesson mounted', title, id);
-
-      // console.log('this', this.props);
       this.props.getCards(id);
-
-      // if (this.props.enhanced) {
-      //   setTimeout(this.props.timeout, 5000);
-      // }
     },
   })
 )(LessonScreen);
