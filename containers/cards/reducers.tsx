@@ -4,7 +4,7 @@ import { CardsTypes } from './actions';
 
 /* ------------- Initial State ------------- */
 export const INITIAL_STATE = Immutable({
-  lessons: [],
+  cards: [],
   status: '',
   fetching: true,
   errorMessage: '',
@@ -17,7 +17,7 @@ export const getCardsRequest = (state, action) => {
 };
 
 export const getCardsSuccess = (state, action) => {
-  return state.merge({ fetching: false, error: false, errorMessage: '', lessons: action.response });
+  return state.merge({ fetching: false, error: false, errorMessage: '', cards: action.response });
 };
 
 export const getCardsFailure = (state, action) => {
@@ -35,7 +35,7 @@ export const addCardSuccess = (state, action) => {
     fetching: false,
     error: false,
     errorMessage: '',
-    lessons: [...state.lessons, { ...action.response.createCard }],
+    cards: [...state.cards, { ...action.response.createCard }],
   });
 };
 
@@ -54,7 +54,7 @@ export const removeCardSuccess = (state, action) => {
     fetching: false,
     error: false,
     errorMessage: '',
-    lessons: state.lessons.filter(lesson => lesson.id !== action.id),
+    cards: state.cards.filter(lesson => lesson.id !== action.id),
   });
 };
 

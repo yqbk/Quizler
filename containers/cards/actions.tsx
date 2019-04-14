@@ -2,7 +2,7 @@ import { createActions } from 'reduxsauce';
 
 /* ------------- Types and Action Creators ------------- */
 const { Types, Creators } = createActions({
-  getCardsRequest: null,
+  getCardsRequest: ['title'],
   getCardsSuccess: ['response'],
   getCardsFailure: ['error'],
 

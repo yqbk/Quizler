@@ -31,27 +31,6 @@ import { createLesson } from '../src/graphql/mutations';
 import Lesson from '../components/Lesson';
 import { lessonsSelector } from '../containers/lessons/selector';
 
-// const listLessons = `
-//   query {
-//     listLesson {
-//       items {
-//         id
-//         title
-//         questions
-//       }
-//     }
-//  }
-// `;
-// const createLesson = `
-//   mutation($title: String!) {
-//     createLesson(input: {
-//       title: $title
-//   }) {
-//     id
-//     title
-//   }
-// }`;
-
 class HomeScreen extends React.Component {
   static navigationOptions = {
     // header: null,
@@ -89,12 +68,6 @@ class HomeScreen extends React.Component {
                   this.props.navigation.navigate('Lesson', {
                     lesson: item,
                   });
-                  // Alert.alert(
-                  //   'Lesson name',
-                  //   item.title,
-                  //   [{ text: 'Go to lesson!', onPress: () => console.log('Ask me later pressed') }],
-                  //   { cancelable: true }
-                  // );
                 }}
               />
             )}
@@ -119,75 +92,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps
 )(HomeScreen);
-
-//  // <View style={styles.container}>
-//       //   <Text style={styles.header}>Lessons</Text>
-//         {/* {this.state.lessons.map((lesson, index) => (
-
-//           ))} */}
-//         {/* <TextInput
-//           style={styles.input}
-//           onChangeText={val => this.onChangeText('title', val)}
-//           placeholder="Lesson Name"
-//           value={this.state.title}
-//         />
-
-//         <Button onPress={this.addLesson} title="Add Lesson!" /> */}
-
-//         {/* <Text style={styles.header}>Lessons</Text> */}
-
-//         {/* <Swiper
-//           cards={['DO', 'MORE', 'OF', 'WHAT', 'MAKES', 'YOU', 'HAPPY']}
-//           marginBottom={100}
-//           marginTop={80}
-//           renderCard={card => {
-//             return (
-//               <View style={styles.card}>
-//                 <FlipCard
-//                   style={styles.flipCard}
-//                   friction={6}
-//                   perspective={1000}
-//                   flipHorizontal
-//                   flipVertical={false}
-//                   flip={false}
-//                   clickable
-//                   onFlipped={isFlipped => {}}
-//                 >
-//                   <View style={styles.face}>
-//                     <Text style={styles.text}>{card.question}</Text>
-//                     <Text style={styles.text}>A</Text>
-//                   </View>
-
-//                   <View style={styles.back}>
-//                     <Text style={styles.text}>B</Text>
-//                     {!this.state.completed && (
-//                       <View>
-//                         <Text style={styles.smallText}>
-//                           If you know the answer swipe the card to the
-//                           <Text style={{ color: 'blue' }}>right.</Text>
-//                         </Text>
-//                         <Text style={styles.smallText}>
-//                           {' '}
-//                           If you would like to repeat this question some more swipe to the
-//                           <Text style={{ color: 'red' }}>left.</Text>
-//                         </Text>
-//                       </View>
-//                     )}
-//                   </View>
-//                 </FlipCard>
-//               </View>
-//             );
-//           }}
-//           onSwiped={cardIndex => {
-//             console.log(cardIndex);
-//           }}
-//           onSwipedAll={() => {
-//             console.log('onSwipedAll');
-//           }}
-//           cardIndex={0}
-//           backgroundColor={'white'}
-//           stackSize={3}
-//         /> */}
-//         {/* <View style={{ height: 150, borderWidth: 3 }} /> */}
-//       // </View>
-//       );
