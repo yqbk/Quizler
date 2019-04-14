@@ -1,7 +1,7 @@
 import { call, put } from 'redux-saga/effects';
 import CardsActions from './actions';
 import API, { graphqlOperation } from '@aws-amplify/api';
-import { listQuestions, listQuestionsByTitle, getLesson } from '../..//src/graphql/queries';
+import { getLesson } from '../../src/graphql/queries';
 import { createQuestion } from '../../src/graphql/mutations';
 
 export function* getCardsFlow({ lessonID }) {
