@@ -2,11 +2,11 @@ import { createActions } from 'reduxsauce';
 
 /* ------------- Types and Action Creators ------------- */
 const { Types, Creators } = createActions({
-  getCardsRequest: ['title'],
+  getCardsRequest: ['lessonID'],
   getCardsSuccess: ['response'],
   getCardsFailure: ['error'],
 
-  addCardRequest: ['title'],
+  addCardRequest: ['lessonId', 'ask', 'answer'],
   addCardSuccess: ['response'],
   addCardFailure: ['error'],
 

@@ -10,7 +10,7 @@ import LessonsActions from '../state/lessonsReducer';
 import CardsActions from '../containers/cards/actions';
 import { bindActionCreators } from '../utils/reduxUtils';
 
-const LessonScreen = ({ navigation, removeLesson, cards, getCards }) => {
+const LessonScreen = ({ navigation, removeLesson, cards, getCards, addCard }) => {
   // console.log('navigation?', navigation);
 
   const { title, id, ...rest } = navigation.getParam('lesson');
@@ -29,7 +29,8 @@ const LessonScreen = ({ navigation, removeLesson, cards, getCards }) => {
     <LessonView>
       <View style={{ flex: 1, flexDirection: 'column', borderWidth: 2, paddingBottom: 32 }}>
         <Text> {title} </Text>
-        <Button title="get cards" onPress={() => getCards(title)} />
+        <Button title="get cards" onPress={() => getCards(id)} />
+        <Button title="add question" onPress={() => addCard(id, 'pytanie', 'odpowiedz')} />
       </View>
 
       {/* <CardsView>
@@ -63,7 +64,8 @@ const LessonView = styled.View`
 
 const mapDispatchToProps = bindActionCreators({
   removeLesson: title => LessonsActions.removeLessonRequest(title),
-  getCards: title => CardsActions.getCardsRequest(title),
+  getCards: lessonID => CardsActions.getCardsRequest(lessonID),
+  addCard: (lessonId, ask, answer) => CardsActions.addCardRequest(lessonId, ask, answer),
 });
 
 export default compose(
@@ -83,7 +85,7 @@ export default compose(
       console.log('lesson mounted', title, id);
 
       // console.log('this', this.props);
-      this.props.getCards(title);
+      this.props.getCards(id);
 
       // if (this.props.enhanced) {
       //   setTimeout(this.props.timeout, 5000);

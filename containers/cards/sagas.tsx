@@ -1,15 +1,17 @@
 import { call, put } from 'redux-saga/effects';
 import CardsActions from './actions';
 import API, { graphqlOperation } from '@aws-amplify/api';
-import { listQuestions, listQuestionsByTitle } from '../..//src/graphql/queries';
-import { createCard, deleteCard } from '../src/graphql/mutations';
+import { listQuestions, listQuestionsByTitle, getLesson } from '../..//src/graphql/queries';
+import { createQuestion } from '../../src/graphql/mutations';
 // import console = require('console');
 // import { goBack } from '../utils/actions';
 
-export function* getCardsFlow({ title }) {
+export function* getCardsFlow({ lessonID }) {
   try {
-    console.log('title', title);
-    const operation = graphqlOperation(listQuestionsByTitle(title));
+    console.log('lessonId', lessonID);
+    // const operation = graphqlOperation(listQuestionsByTitle(title));
+    const operation = graphqlOperation(getLesson, { id: lessonID });
+
     console.log('operation', operation);
     const test = () => API.graphql(operation);
 
@@ -27,24 +29,24 @@ export function* getCardsFlow({ title }) {
   }
 }
 
-// export function* addCardFlow({ title }) {
-//   try {
-//     const operation = graphqlOperation(createCard, { input: { title: title } });
-//     const addCardApi = () => API.graphql(operation);
+export function* addCardFlow({ lessonId, ask, answer }) {
+  try {
+    const operation = graphqlOperation(createQuestion, {
+      input: { ask: ask, answer: answer, questionLessonId: lessonId },
+    });
+    const addCardApi = () => API.graphql(operation);
+    const graphqlData = yield call(addCardApi);
+    const response = graphqlData.data;
 
-//     const graphqlData = yield call(addCardApi);
-
-//     const response = graphqlData.data;
-
-//     if (response) {
-//       yield put(CardsActions.addCardSuccess(response));
-//     } else {
-//       yield put(CardsActions.addCardFailure(`Add lesson failure: ${title}`));
-//     }
-//   } catch (error) {
-//     yield put(CardsActions.addCardFailure(error.message));
-//   }
-// }
+    if (response) {
+      yield put(CardsActions.addCardSuccess(response));
+    } else {
+      yield put(CardsActions.addCardFailure(`Add lesson failure: ${title}`));
+    }
+  } catch (error) {
+    yield put(CardsActions.addCardFailure(error.message));
+  }
+}
 
 // export function* removeCardFlow({ id }) {
 //   try {

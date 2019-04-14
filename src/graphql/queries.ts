@@ -114,22 +114,25 @@ export const listQuestions = `query ListQuestions(
 }
 `;
 
-export const listQuestionsByTitle = (title: string) => `query ListQuestions(
-  $filter: ModelQuestionFilterInput
-  $limit: Int
-  $nextToken: String
-) {
-  listQuestions(title: ${title}, limit: $limit, nextToken: $nextToken) {
-    items {
-      id
-      ask
-      answer
-      lesson {
-        id
-        title
-      }
-    }
-    nextToken
-  }
-}
-`;
+// export const createLesson = `mutation CreateLesson($input: CreateLessonInput!) {
+//   createLesson(input: $input) {
+//     id
+//     title
+//     user {
+//       id
+//       name
+//       lessons {
+//         nextToken
+//       }
+//     }
+//     questions {
+//       items {
+//         id
+//         ask
+//         answer
+//       }
+//       nextToken
+//     }
+//   }
+// }
+// `;
