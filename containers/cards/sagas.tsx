@@ -3,6 +3,7 @@ import CardsActions from './actions';
 import API, { graphqlOperation } from '@aws-amplify/api';
 import { getLesson } from '../../src/graphql/queries';
 import { createQuestion } from '../../src/graphql/mutations';
+import _get from 'lodash/get';
 
 export function* getCardsFlow({ lessonID }) {
   try {
@@ -13,7 +14,10 @@ export function* getCardsFlow({ lessonID }) {
     const response = graphqlData.data;
 
     if (response) {
-      yield put(CardsActions.getCardsSuccess(response.listCards.items));
+      const cards = _get(response, ['getLesson', 'questions', 'items']);
+      console.log('response', response, cards);
+
+      yield put(CardsActions.getCardsSuccess(cards));
     } else {
       yield put(CardsActions.getCardsFailure('Connection problems :('));
     }

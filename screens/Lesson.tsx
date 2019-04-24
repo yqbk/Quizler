@@ -9,6 +9,7 @@ import styled from 'styled-components';
 import LessonsActions from '../state/lessonsReducer';
 import CardsActions from '../containers/cards/actions';
 import { bindActionCreators } from '../utils/reduxUtils';
+import { cardsSelector } from '../containers/cards/selector';
 
 const LessonScreen = ({ navigation, removeLesson, cards, getCards, addCard }) => {
   const { title, id, ...rest } = navigation.getParam('lesson');
@@ -23,19 +24,21 @@ const LessonScreen = ({ navigation, removeLesson, cards, getCards, addCard }) =>
         <Button title="add question" onPress={() => addCard(id, 'pytanie', 'odpowiedz')} />
       </View>
 
-      {/* <CardsView>
+      <CardsView>
         {cards && (
           <FlatList
             data={[{ isNew: true }, ...cards]}
             keyExtractor={this._keyExtractor}
             renderItem={({ item }) => (
               <View>
-                <Text>Card -> </Text>
+                <Text>
+                  Card -> {item.ask} = {item.answer}
+                </Text>
               </View>
             )}
           />
         )}
-      </CardsView> */}
+      </CardsView>
       <Button color="red" title=" Delete lesson " onPress={() => removeLesson(id)} />
     </LessonView>
   );
@@ -43,6 +46,7 @@ const LessonScreen = ({ navigation, removeLesson, cards, getCards, addCard }) =>
 
 const CardsView = styled.View`
   border: 1px solid red;
+  flex: 1;
 `;
 
 const LessonView = styled.View`
@@ -52,6 +56,10 @@ const LessonView = styled.View`
   padding-top: 15;
 `;
 
+const mapStateToProps = state => ({
+  cards: cardsSelector(state),
+});
+
 const mapDispatchToProps = bindActionCreators({
   removeLesson: title => LessonsActions.removeLessonRequest(title),
   getCards: lessonID => CardsActions.getCardsRequest(lessonID),
@@ -60,7 +68,7 @@ const mapDispatchToProps = bindActionCreators({
 
 export default compose(
   connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
   ),
   // withProps(({ closeDialog }) => ({
