@@ -10,3 +10,6 @@ dist/
 node_modules/
 aws-exports.js
 awsconfiguration.json
+packager-info.json
+package.jso
+yarn.lock
