@@ -17,7 +17,7 @@ import AddCard from './components/AddCard';
 
 const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
-const LessonScreen = ({ navigation, removeLesson, cards, getCards }) => {
+const LessonScreen = ({ navigation, removeLesson, cards, getCards, removeCard }) => {
   const { title, id } = navigation.getParam('lesson');
 
   console.log('cards', cards);
@@ -35,19 +35,19 @@ const LessonScreen = ({ navigation, removeLesson, cards, getCards }) => {
               <AnswerText> {data.answer} </AnswerText>
             </ListItem>
           )}
-          renderLeftHiddenRow={data => (
-            <Button full onPress={() => alert(data)}>
+          renderRightHiddenRow={data => (
+            <Button full onPress={() => console.log(data)}>
               <Icon active name="information-circle" />
             </Button>
           )}
-          renderRightHiddenRow={(data, secId, rowId, rowMap) => (
-            <Button full danger onPress={_ => alert('delete')}>
+          renderLeftHiddenRow={data => (
+            <Button full danger onPress={_ => removeCard(data.id)}>
               <Icon active name="trash" />
             </Button>
           )}
         />
 
-        <AddCard lessonId={id}/>
+        <AddCard lessonId={id} />
 
         <View
           style={{
@@ -87,6 +87,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = bindActionCreators({
   removeLesson: title => LessonsActions.removeLessonRequest(title),
   getCards: lessonID => CardsActions.getCardsRequest(lessonID),
+  removeCard: cardId => CardsActions.removeCardRequest(cardId),
 });
 
 export default compose(

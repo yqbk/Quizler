@@ -9,7 +9,7 @@ import { getLessonsFlow } from './lessonsSaga';
 import { addLessonFlow } from './lessonsSaga';
 import { removeLessonFlow } from './lessonsSaga';
 import { CardsTypes } from '../containers/cards/actions';
-import { getCardsFlow, addCardFlow } from '../containers/cards/sagas';
+import { getCardsFlow, addCardFlow, removeCardFlow } from '../containers/cards/sagas';
 
 /* ------------- API ------------- */
 // const api = API.create()
@@ -22,4 +22,5 @@ export default function* root() {
 
   yield all([yield takeEvery(CardsTypes.GET_CARDS_REQUEST, getCardsFlow)]);
   yield all([yield takeEvery(CardsTypes.ADD_CARD_REQUEST, addCardFlow)]);
+  yield all([yield takeEvery(CardsTypes.REMOVE_CARD_REQUEST, removeCardFlow)]);
 }

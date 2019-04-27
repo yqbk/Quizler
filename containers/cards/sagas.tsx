@@ -2,7 +2,7 @@ import { call, put } from 'redux-saga/effects';
 import CardsActions from './actions';
 import API, { graphqlOperation } from '@aws-amplify/api';
 import { getLesson } from '../../src/graphql/queries';
-import { createQuestion } from '../../src/graphql/mutations';
+import { createQuestion, deleteQuestion } from '../../src/graphql/mutations';
 import _get from 'lodash/get';
 
 export function* getCardsFlow({ lessonID }) {
@@ -38,31 +38,28 @@ export function* addCardFlow({ lessonId, ask, answer }) {
     if (response) {
       yield put(CardsActions.addCardSuccess(response));
     } else {
-      yield put(CardsActions.addCardFailure(`Add lesson failure: ${title}`));
+      yield put(CardsActions.addCardFailure(`Add lesson failure: ${lessonId}`));
     }
   } catch (error) {
     yield put(CardsActions.addCardFailure(error.message));
   }
 }
 
-// export function* removeCardFlow({ id }) {
-//   try {
-//     console.log('lessonId', id);
+export function* removeCardFlow({ id }) {
+  try {
+    console.log(' remove: card', id);
 
-//     const operation = graphqlOperation(deleteCard, { input: { id: id } });
-//     const removeCardApi = () => API.graphql(operation);
+    const operation = graphqlOperation(deleteQuestion, { input: { id } });
+    const removeCardApi = () => API.graphql(operation);
+    const graphqlData = yield call(removeCardApi);
+    const response = graphqlData.data;
 
-//     const graphqlData = yield call(removeCardApi);
-
-//     const deletedCardId = graphqlData.data.deleteCard.id;
-
-//     if (deletedCardId) {
-//       yield put(CardsActions.removeCardSuccess(deletedCardId));
-//       yield put(goBack(null));
-//     } else {
-//       yield put(CardsActions.removeCardFailure(`Remove lesson failure: ${id}`));
-//     }
-//   } catch (error) {
-//     yield put(CardsActions.removeCardFailure(error.message));
-//   }
-// }
+    if (response) {
+      yield put(CardsActions.removeCardSuccess(response.id));
+    } else {
+      yield put(CardsActions.removeCardFailure(`Remove lesson failure: ${id}`));
+    }
+  } catch (error) {
+    yield put(CardsActions.removeCardFailure(error.message));
+  }
+}

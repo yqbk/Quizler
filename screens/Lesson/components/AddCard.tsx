@@ -27,7 +27,11 @@ const AddCard = ({ lessonId, addCard, ask, setAsk, answer, setAnswer }) => {
         </Item>
       </View>
       <CardItem footer={true}>
-        <Button transparent={true} onPress={() => addCard(lessonId, ask, answer)}>
+        <Button
+          transparent={true}
+          onPress={() => addCard(lessonId, ask, answer)}
+          disabled={!ask || !answer}
+        >
           <Text> Add </Text>
         </Button>
       </CardItem>
