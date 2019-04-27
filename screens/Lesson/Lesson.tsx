@@ -1,46 +1,28 @@
 import React from 'react';
-// import { Font } from 'expo';
-// import { Ionicons } from '@expo/vector-icons';
-import {
-  Container,
-  Header,
-  Content,
-  Accordion,
-  Button,
-  Text,
-  Icon,
-  List,
-  ListItem,
-  Body,
-  Title,
-  Form,
-  Item,
-  Input,
-  Label,
-} from 'native-base';
+import { Container, Content, Button, Text, Icon, List, ListItem } from 'native-base';
 
 import { ListView } from 'react-native';
 
 import { connect } from 'react-redux';
-import { lifecycle, compose, withProps, pure } from 'recompose';
+import { lifecycle, compose } from 'recompose';
 
-import { View, FlatList } from 'react-native';
+import { View } from 'react-native';
 import styled from 'styled-components';
 
-import LessonsActions from '../state/lessonsReducer';
-import CardsActions from '../containers/cards/actions';
-import { bindActionCreators } from '../utils/reduxUtils';
-import { cardsSelector } from '../containers/cards/selector';
+import LessonsActions from '../../state/lessonsReducer';
+import CardsActions from '../../containers/cards/actions';
+import { bindActionCreators } from '../../utils/reduxUtils';
+import { cardsSelector } from '../../containers/cards/selector';
+import AddCard from './components/AddCard';
 
 const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
-const LessonScreen = ({ navigation, removeLesson, cards, getCards, addCard }) => {
-  const { title, id, ...rest } = navigation.getParam('lesson');
+const LessonScreen = ({ navigation, removeLesson, cards, getCards }) => {
+  const { title, id } = navigation.getParam('lesson');
 
   console.log('cards', cards);
 
   return (
-    // <LessonView>
     <Container>
       <Content padder contentContainerStyle={{ flexGrow: 1 }}>
         <List
@@ -65,23 +47,8 @@ const LessonScreen = ({ navigation, removeLesson, cards, getCards, addCard }) =>
           )}
         />
 
-        <AddCardForm>
-          <View style={{ flex: 1 }}>
-            <Item floatingLabel style={{ flex: 1 }}>
-              <Label> Question </Label>
-              <Input />
-            </Item>
-            <Item floatingLabel style={{ flex: 1 }}>
-              <Label> Answer </Label>
-              <Input />
-            </Item>
-          </View>
-          <View style={{ flex: 0, marginLeft: 20 }}>
-            <Button rounded onPress={() => alert('test')}>
-              <Text> Add </Text>
-            </Button>
-          </View>
-        </AddCardForm>
+        <AddCard />
+
         <View
           style={{
             alignItems: 'center',
@@ -97,19 +64,11 @@ const LessonScreen = ({ navigation, removeLesson, cards, getCards, addCard }) =>
         </View>
       </Content>
     </Container>
-    // </LessonView>
   );
 };
 
 const CardsView = styled.View`
   flex: 1;
-`;
-
-const LessonView = styled.View`
-  border: 1px solid #000000ab;
-  flex: 1;
-  padding-top: 15;
-  justify-content: center;
 `;
 
 const AnswerText = styled.Text`
@@ -121,16 +80,6 @@ export const Spacer = styled.View`
   flex: 1;
 `;
 
-const AddCardForm = styled.View`
-  /* font-size: 12px;
-  color: gray; */
-  /* border: 1px solid black; */
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-`;
-
 const mapStateToProps = state => ({
   cards: cardsSelector(state),
 });
@@ -138,7 +87,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = bindActionCreators({
   removeLesson: title => LessonsActions.removeLessonRequest(title),
   getCards: lessonID => CardsActions.getCardsRequest(lessonID),
-  addCard: (lessonId, ask, answer) => CardsActions.addCardRequest(lessonId, ask, answer),
 });
 
 export default compose(
@@ -146,12 +94,9 @@ export default compose(
     mapStateToProps,
     mapDispatchToProps
   ),
-
   lifecycle({
     componentDidMount() {
-      const { title, id, ...rest } = this.props.navigation.getParam('lesson');
-
-      console.log('lesson mounted', title, id);
+      const { id } = this.props.navigation.getParam('lesson');
       this.props.getCards(id);
     },
   })
