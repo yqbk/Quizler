@@ -53,11 +53,11 @@ class HomeScreen extends React.Component {
     }
 
     return (
-      <View>
+      <View style={{ flex: 1 }}>
         {lekcje && lekcje.length && (
           <FlatList
             data={[{ isNew: true }, ...lekcje]}
-            keyExtractor={this._keyExtractor}
+            keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
               <Lesson
                 lessonName={item.title}
