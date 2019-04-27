@@ -1,19 +1,19 @@
-import React from 'react';
-import { Button, Text, Item, Input, Label, Card, CardItem } from 'native-base';
+import React from 'react'
+import { Button, Text, Item, Input, Label, Card, CardItem } from 'native-base'
 
-import { ListView } from 'react-native';
+import { ListView } from 'react-native'
 
-import { connect } from 'react-redux';
-import { lifecycle, compose, withState, withHandlers } from 'recompose';
+import { connect } from 'react-redux'
+import { lifecycle, compose, withState, withHandlers } from 'recompose'
 
-import { View, FlatList } from 'react-native';
-import styled from 'styled-components';
+import { View, FlatList } from 'react-native'
+import styled from 'styled-components'
 
-import CardsActions from '../../../../containers/cards/actions';
-import { bindActionCreators } from '../../../../utils/reduxUtils';
+import CardsActions from '../../../../containers/cards/actions'
+import { bindActionCreators } from '../../../../utils/reduxUtils'
 
 const AddCard = ({ lessonId, addCard, ask, setAsk, answer, setAnswer }) => {
-  console.log('->', lessonId, ask, answer);
+  console.log('->', lessonId, ask, answer)
   return (
     <Card>
       <View style={{ flex: 1 }}>
@@ -36,26 +36,27 @@ const AddCard = ({ lessonId, addCard, ask, setAsk, answer, setAnswer }) => {
         </Button>
       </CardItem>
     </Card>
-  );
-};
+  )
+}
 
 const mapStateToProps = state => ({
   //   cards: cardsSelector(state),
-});
+})
 
 const mapDispatchToProps = bindActionCreators({
-  addCard: (lessonId, ask, answer) => CardsActions.addCardRequest(lessonId, ask, answer),
-});
+  addCard: (lessonId, ask, answer) =>
+    CardsActions.addCardRequest(lessonId, ask, answer),
+})
 
 export default compose(
   connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
   ),
   withState('ask', 'setAsk', ''),
   withState('answer', 'setAnswer', ''),
   withHandlers({
     changeAsk: ({ setAsk }) => () => setAsk(ask => ask),
     changeAnswer: ({ setAnswer }) => () => setAnswer(answer => answer),
-  })
-)(AddCard);
+  }),
+)(AddCard)

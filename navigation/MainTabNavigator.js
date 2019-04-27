@@ -1,35 +1,34 @@
-import React from 'react';
-import { Platform } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import React from 'react'
+import { Platform } from 'react-native'
+import {
+  createStackNavigator,
+  createBottomTabNavigator,
+} from 'react-navigation'
 
-import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/Home/HomeScreen';
-import LinksScreen from '../screens/Progress/LinksScreen';
-import SettingsScreen from '../screens/Settings/SettingsScreen';
-import LessonScreen from '../screens/Home/Lesson/Lesson';
+import TabBarIcon from '../components/TabBarIcon'
+import HomeScreen from '../screens/Home/HomeScreen'
+import LinksScreen from '../screens/Progress/LinksScreen'
+import SettingsScreen from '../screens/Settings/SettingsScreen'
+import LessonScreen from '../screens/Home/Lesson/Lesson'
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
-  Lesson: LessonScreen
-});
+  Lesson: LessonScreen,
+})
 
 HomeStack.navigationOptions = {
   tabBarLabel: 'Cards',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? 'ios-albums'
-          : 'md-albums'
-      }
+      name={Platform.OS === 'ios' ? 'ios-albums' : 'md-albums'}
     />
   ),
-};
+}
 
 const LinksStack = createStackNavigator({
   Links: LinksScreen,
-});
+})
 
 LinksStack.navigationOptions = {
   tabBarLabel: 'Progress',
@@ -39,11 +38,11 @@ LinksStack.navigationOptions = {
       name={Platform.OS === 'ios' ? 'ios-analytics' : 'md-analytics'}
     />
   ),
-};
+}
 
 const SettingsStack = createStackNavigator({
   Settings: SettingsScreen,
-});
+})
 
 SettingsStack.navigationOptions = {
   tabBarLabel: 'Settings',
@@ -53,10 +52,10 @@ SettingsStack.navigationOptions = {
       name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
     />
   ),
-};
+}
 
 export default createBottomTabNavigator({
   HomeStack,
   LinksStack,
   SettingsStack,
-});
+})

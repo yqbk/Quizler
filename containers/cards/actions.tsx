@@ -1,4 +1,4 @@
-import { createActions } from 'reduxsauce';
+import { createActions } from 'reduxsauce'
 
 /* ------------- Types and Action Creators ------------- */
 const { Types, Creators } = createActions({
@@ -13,7 +13,7 @@ const { Types, Creators } = createActions({
   removeCardRequest: ['id'],
   removeCardSuccess: ['id'],
   removeCardFailure: ['error'],
-});
+})
 
-export const CardsTypes = Types;
-export default Creators;
+export const CardsTypes = Types
+export default Creators
