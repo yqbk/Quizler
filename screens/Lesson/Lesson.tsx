@@ -47,7 +47,7 @@ const LessonScreen = ({ navigation, removeLesson, cards, getCards }) => {
           )}
         />
 
-        <AddCard />
+        <AddCard lessonId={id}/>
 
         <View
           style={{

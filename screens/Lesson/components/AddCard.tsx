@@ -12,21 +12,22 @@ import styled from 'styled-components';
 import CardsActions from '../../../containers/cards/actions';
 import { bindActionCreators } from '../../../utils/reduxUtils';
 
-const AddCard = ({ addCard }) => {
+const AddCard = ({ lessonId, addCard, ask, setAsk, answer, setAnswer }) => {
+  console.log('->', lessonId, ask, answer);
   return (
     <Card>
       <View style={{ flex: 1 }}>
         <Item floatingLabel={true} style={{ flex: 1 }}>
           <Label> Question </Label>
-          <Input />
+          <Input onChangeText={setAsk} />
         </Item>
         <Item floatingLabel={true} style={{ flex: 1 }}>
           <Label> Answer </Label>
-          <Input />
+          <Input onChangeText={setAnswer} />
         </Item>
       </View>
       <CardItem footer={true}>
-        <Button transparent={true} onPress={() => alert('test')}>
+        <Button transparent={true} onPress={() => addCard(lessonId, ask, answer)}>
           <Text> Add </Text>
         </Button>
       </CardItem>
@@ -47,19 +48,10 @@ export default compose(
     mapStateToProps,
     mapDispatchToProps
   ),
-  withState('counter', 'setCounter', 0),
+  withState('ask', 'setAsk', ''),
+  withState('answer', 'setAnswer', ''),
   withHandlers({
-    increment: ({ setCounter }) => () => setCounter(n => n + 1),
-    decrement: ({ setCounter }) => () => setCounter(n => n - 1),
-    reset: ({ setCounter }) => () => setCounter(0),
+    changeAsk: ({ setAsk }) => () => setAsk(ask => ask),
+    changeAnswer: ({ setAnswer }) => () => setAnswer(answer => answer),
   })
-
-  //   lifecycle({
-  //     componentDidMount() {
-  //       const { title, id, ...rest } = this.props.navigation.getParam('lesson');
-
-  //       console.log('lesson mounted', title, id);
-  //       this.props.getCards(id);
-  //     },
-  //   })
 )(AddCard);
