@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from 'react'
+import styled from 'styled-components'
 import {
   Image,
   ScrollView,
@@ -10,19 +10,15 @@ import {
   TextInput,
   Alert,
   FlatList,
-} from 'react-native';
-import NewLesson from './NewLesson';
+} from 'react-native'
+import NewLesson from './NewLesson'
 
 const Lesson = ({ lessonName, onPress, isNew }) => (
   <LessonWrapper onPress={onPress} isNew={isNew}>
-    {
-        isNew ? 
-    <NewLesson /> : 
-    <LessonTitle>{lessonName || 'empty'}</LessonTitle>
-    }
+    {isNew ? <NewLesson /> : <LessonTitle>{lessonName || 'empty'}</LessonTitle>}
     {/* <LessonTitle>{lessonName || 'test'}</LessonTitle> */}
   </LessonWrapper>
-);
+)
 
 const LessonWrapper = styled.TouchableOpacity`
   border: 1px solid #000000ab;
@@ -35,7 +31,7 @@ const LessonWrapper = styled.TouchableOpacity`
   border-radius: 5px;
 
   /* background: ${props => (props.isNew ? `#000000ae` : `white`)}; */
-`;
+`
 
 const LessonTitle = styled.Text`
   color: black;
@@ -43,6 +39,6 @@ const LessonTitle = styled.Text`
   text-align: center;
   flex: 1;
   font-weight: 900;
-`;
+`
 
-export default Lesson;
+export default Lesson

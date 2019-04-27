@@ -1,26 +1,40 @@
-import React from 'react';
-import { Container, Content, Button, Text, Icon, List, ListItem } from 'native-base';
+import React from 'react'
+import {
+  Container,
+  Content,
+  Button,
+  Text,
+  Icon,
+  List,
+  ListItem,
+} from 'native-base'
 
-import { ListView } from 'react-native';
+import { ListView } from 'react-native'
 
-import { connect } from 'react-redux';
-import { lifecycle, compose } from 'recompose';
+import { connect } from 'react-redux'
+import { lifecycle, compose } from 'recompose'
 
-import { View } from 'react-native';
-import styled from 'styled-components';
+import { View } from 'react-native'
+import styled from 'styled-components'
 
-import LessonsActions from '../../state/lessonsReducer';
-import CardsActions from '../../containers/cards/actions';
-import { bindActionCreators } from '../../utils/reduxUtils';
-import { cardsSelector } from '../../containers/cards/selector';
-import AddCard from './components/AddCard';
+import LessonsActions from '../../../containers/lessons/reducers'
+import CardsActions from '../../../containers/cards/actions'
+import { bindActionCreators } from '../../../utils/reduxUtils'
+import { cardsSelector } from '../../../containers/cards/selector'
+import AddCard from './components/AddCard'
 
-const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
 
-const LessonScreen = ({ navigation, removeLesson, cards, getCards, removeCard }) => {
-  const { title, id } = navigation.getParam('lesson');
+const LessonScreen = ({
+  navigation,
+  removeLesson,
+  cards,
+  getCards,
+  removeCard,
+}) => {
+  const { title, id } = navigation.getParam('lesson')
 
-  console.log('cards', cards);
+  console.log('cards', cards)
 
   return (
     <Container>
@@ -41,7 +55,7 @@ const LessonScreen = ({ navigation, removeLesson, cards, getCards, removeCard })
             </Button>
           )}
           renderLeftHiddenRow={data => (
-            <Button full danger onPress={_ => removeCard(data.id)}>
+            <Button full danger onPress={() => removeCard(data.id)}>
               <Icon active name="trash" />
             </Button>
           )}
@@ -58,47 +72,52 @@ const LessonScreen = ({ navigation, removeLesson, cards, getCards, removeCard })
           }}
         >
           <Spacer />
-          <Button danger block onPress={() => removeLesson(id)} style={{ flex: 1 }}>
+          <Button
+            danger
+            block
+            onPress={() => removeLesson(id)}
+            style={{ flex: 1 }}
+          >
             <Text> Remove lesson </Text>
           </Button>
         </View>
       </Content>
     </Container>
-  );
-};
+  )
+}
 
 const CardsView = styled.View`
   flex: 1;
-`;
+`
 
 const AnswerText = styled.Text`
   font-size: 12px;
   color: gray;
-`;
+`
 
 export const Spacer = styled.View`
   flex: 1;
-`;
+`
 
 const mapStateToProps = state => ({
   cards: cardsSelector(state),
-});
+})
 
 const mapDispatchToProps = bindActionCreators({
   removeLesson: title => LessonsActions.removeLessonRequest(title),
   getCards: lessonID => CardsActions.getCardsRequest(lessonID),
   removeCard: cardId => CardsActions.removeCardRequest(cardId),
-});
+})
 
 export default compose(
   connect(
     mapStateToProps,
-    mapDispatchToProps
+    mapDispatchToProps,
   ),
   lifecycle({
     componentDidMount() {
-      const { id } = this.props.navigation.getParam('lesson');
-      this.props.getCards(id);
+      const { id } = this.props.navigation.getParam('lesson')
+      this.props.getCards(id)
     },
-  })
-)(LessonScreen);
+  }),
+)(LessonScreen)

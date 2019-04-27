@@ -1,6 +1,6 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import styled from 'styled-components';
+import React from 'react'
+import { connect } from 'react-redux'
+import styled from 'styled-components'
 import {
   Image,
   ScrollView,
@@ -11,22 +11,22 @@ import {
   TextInput,
   Alert,
   FlatList,
-} from 'react-native';
+} from 'react-native'
 
-import LessonsActions from '../state/lessonsReducer';
+import LessonsActions from '../containers/lessons/reducers'
 
-import Amplify from '@aws-amplify/core';
-import config from '../aws-exports';
-Amplify.configure(config);
-import API, { graphqlOperation } from '@aws-amplify/api';
-import { createLesson } from '../src/graphql/mutations';
-import Analytics from '@aws-amplify/analytics';
-import { bindActionCreators } from '../utils/reduxUtils';
+import Amplify from '@aws-amplify/core'
+import config from '../aws-exports'
+Amplify.configure(config)
+import API, { graphqlOperation } from '@aws-amplify/api'
+import { createLesson } from '../src/graphql/mutations'
+import Analytics from '@aws-amplify/analytics'
+import { bindActionCreators } from '../utils/reduxUtils'
 class NewLesson extends React.Component {
   state = {
     lessons: [],
     title: '',
-  };
+  }
 
   // addLesson = async () => {
   //   const lessonTitle = this.state.title;
@@ -56,8 +56,8 @@ class NewLesson extends React.Component {
   // };
 
   onChangeText = (key, val) => {
-    this.setState({ [key]: val });
-  };
+    this.setState({ [key]: val })
+  }
 
   render() {
     // console.log('this.props', this.props);
@@ -75,36 +75,36 @@ class NewLesson extends React.Component {
           size={'small'}
         />
       </NewLessonWrapper>
-    );
+    )
   }
 }
 
 const mapDispatchToProps = bindActionCreators({
   addLesson: title => LessonsActions.addLessonRequest(title),
-});
+})
 
 export default connect(
   null,
-  mapDispatchToProps
-)(NewLesson);
+  mapDispatchToProps,
+)(NewLesson)
 
 const NewLessonWrapper = styled.View`
   align-items: center;
   justify-content: center;
-`;
+`
 
 const NewLessonButton = styled.Button`
   font-size: 8;
   color: red;
   width: 30px;
   border: 1px solid black;
-`;
+`
 
 const NewLessonText = styled.Text`
   /* color: red; */
   font-size: 20;
   font-weight: 500;
-`;
+`
 
 const NewLessonInput = styled.TextInput`
   font-size: 20;
@@ -118,4 +118,4 @@ const NewLessonInput = styled.TextInput`
   /* align-content: center;
     justify-content: center; */
   text-align: center;
-`;
+`
