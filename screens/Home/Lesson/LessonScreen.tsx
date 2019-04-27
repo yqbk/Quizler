@@ -86,7 +86,7 @@ const LessonScreen = ({
         >
           <Button
             block
-            onPress={() => console.log('start lesson')}
+            onPress={() => navigation.navigate('Quiz')}
             style={{ flex: 1 }}
           >
             <Text> Start lesson </Text>
