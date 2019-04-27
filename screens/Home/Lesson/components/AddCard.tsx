@@ -13,7 +13,6 @@ import CardsActions from '../../../../containers/cards/actions'
 import { bindActionCreators } from '../../../../utils/reduxUtils'
 
 const AddCard = ({ lessonId, addCard, ask, setAsk, answer, setAnswer }) => {
-  console.log('->', lessonId, ask, answer)
   return (
     <Card>
       <View style={{ flex: 1 }}>

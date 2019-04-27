@@ -27,11 +27,9 @@ export default class SettingsScreen extends React.Component {
           {/* <Text>Sign out</Text> */}
           <Button
             onPress={() => {
-              console.log('Sign out')
               Auth.signOut()
                 .then(data => console.log(data))
                 .then(() => this.props.onStateChange('signedOut', null))
-                // .catch(err => this.error(err));
                 .catch(err => console.log(err))
             }}
             title="Sign out"

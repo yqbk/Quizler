@@ -47,8 +47,6 @@ export function* addLessonFlow({ title }) {
 
 export function* removeLessonFlow({ id }) {
   try {
-    console.log('lessonId', id)
-
     const operation = graphqlOperation(deleteLesson, { input: { id: id } })
     const removeLessonApi = () => API.graphql(operation)
 

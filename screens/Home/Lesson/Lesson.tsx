@@ -34,8 +34,6 @@ const LessonScreen = ({
 }) => {
   const { title, id } = navigation.getParam('lesson')
 
-  console.log('cards', cards)
-
   return (
     <Container>
       <Content padder contentContainerStyle={{ flexGrow: 1 }}>

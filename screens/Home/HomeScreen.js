@@ -47,11 +47,9 @@ class HomeScreen extends React.Component {
   }
 
   render() {
-    console.log('=> ', this.props.lessons)
     let lekcje = null
     if (this.props.lessons && this.props.lessons.length) {
       lekcje = this.props.lessons.filter(item => item.id && item.title)
-      lekcje.map(lekcja => console.log(lekcja.title))
     }
 
     return (

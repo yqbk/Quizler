@@ -15,7 +15,6 @@ export function* getCardsFlow({ lessonID }) {
 
     if (response) {
       const cards = _get(response, ['getLesson', 'questions', 'items'])
-      console.log('response', response, cards)
 
       yield put(CardsActions.getCardsSuccess(cards))
     } else {
@@ -47,8 +46,6 @@ export function* addCardFlow({ lessonId, ask, answer }) {
 
 export function* removeCardFlow({ id }) {
   try {
-    console.log(' remove: card', id)
-
     const operation = graphqlOperation(deleteQuestion, { input: { id } })
     const removeCardApi = () => API.graphql(operation)
     const graphqlData = yield call(removeCardApi)
