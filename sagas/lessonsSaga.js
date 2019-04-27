@@ -1,66 +1,70 @@
-import { call, put } from 'redux-saga/effects';
-import LessonsActions from '../state/lessonsReducer';
-import API, { graphqlOperation } from '@aws-amplify/api';
-import { listLessons } from '../src/graphql/queries';
-import { createLesson, deleteLesson } from '../src/graphql/mutations';
-import { goBack } from '../utils/actions';
+import { call, put } from 'redux-saga/effects'
+import LessonsActions from '../containers/lessons/reducers'
+import API, { graphqlOperation } from '@aws-amplify/api'
+import { listLessons } from '../src/graphql/queries'
+import { createLesson, deleteLesson } from '../src/graphql/mutations'
+import { goBack } from '../utils/actions'
 
 export function* getLessonsFlow() {
   try {
-    const operation = graphqlOperation(listLessons);
-    const test = () => API.graphql(operation);
+    const operation = graphqlOperation(listLessons)
+    const test = () => API.graphql(operation)
 
-    const graphqlData = yield call(test);
+    const graphqlData = yield call(test)
 
-    const response = graphqlData.data;
+    const response = graphqlData.data
 
     if (response) {
-      yield put(LessonsActions.getLessonsSuccess(response.listLessons.items));
+      yield put(LessonsActions.getLessonsSuccess(response.listLessons.items))
     } else {
-      yield put(LessonsActions.getLessonsFailure('Connection problems :('));
+      yield put(LessonsActions.getLessonsFailure('Connection problems :('))
     }
   } catch (error) {
-    yield put(LessonsActions.getLessonsFailure(error.message));
+    yield put(LessonsActions.getLessonsFailure(error.message))
   }
 }
 
 export function* addLessonFlow({ title }) {
   try {
-    const operation = graphqlOperation(createLesson, { input: { title: title } });
-    const addLessonApi = () => API.graphql(operation);
+    const operation = graphqlOperation(createLesson, {
+      input: { title: title },
+    })
+    const addLessonApi = () => API.graphql(operation)
 
-    const graphqlData = yield call(addLessonApi);
+    const graphqlData = yield call(addLessonApi)
 
-    const response = graphqlData.data;
+    const response = graphqlData.data
 
     if (response) {
-      yield put(LessonsActions.addLessonSuccess(response));
+      yield put(LessonsActions.addLessonSuccess(response))
     } else {
-      yield put(LessonsActions.addLessonFailure(`Add lesson failure: ${title}`));
+      yield put(LessonsActions.addLessonFailure(`Add lesson failure: ${title}`))
     }
   } catch (error) {
-    yield put(LessonsActions.addLessonFailure(error.message));
+    yield put(LessonsActions.addLessonFailure(error.message))
   }
 }
 
 export function* removeLessonFlow({ id }) {
   try {
-    console.log('lessonId', id);
+    console.log('lessonId', id)
 
-    const operation = graphqlOperation(deleteLesson, { input: { id: id } });
-    const removeLessonApi = () => API.graphql(operation);
+    const operation = graphqlOperation(deleteLesson, { input: { id: id } })
+    const removeLessonApi = () => API.graphql(operation)
 
-    const graphqlData = yield call(removeLessonApi);
+    const graphqlData = yield call(removeLessonApi)
 
-    const deletedLessonId = graphqlData.data.deleteLesson.id;
+    const deletedLessonId = graphqlData.data.deleteLesson.id
 
     if (deletedLessonId) {
-      yield put(LessonsActions.removeLessonSuccess(deletedLessonId));
-      yield put(goBack(null));
+      yield put(LessonsActions.removeLessonSuccess(deletedLessonId))
+      yield put(goBack(null))
     } else {
-      yield put(LessonsActions.removeLessonFailure(`Remove lesson failure: ${id}`));
+      yield put(
+        LessonsActions.removeLessonFailure(`Remove lesson failure: ${id}`),
+      )
     }
   } catch (error) {
-    yield put(LessonsActions.removeLessonFailure(error.message));
+    yield put(LessonsActions.removeLessonFailure(error.message))
   }
 }

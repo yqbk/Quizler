@@ -17,7 +17,7 @@ import { lifecycle, compose } from 'recompose'
 import { View } from 'react-native'
 import styled from 'styled-components'
 
-import LessonsActions from '../../state/lessonsReducer'
+import LessonsActions from '../../containers/lessons/reducers'
 import CardsActions from '../../containers/cards/actions'
 import { bindActionCreators } from '../../utils/reduxUtils'
 import { cardsSelector } from '../../containers/cards/selector'
@@ -55,7 +55,7 @@ const LessonScreen = ({
             </Button>
           )}
           renderLeftHiddenRow={data => (
-            <Button full danger onPress={_ => removeCard(data.id)}>
+            <Button full danger onPress={() => removeCard(data.id)}>
               <Icon active name="trash" />
             </Button>
           )}

@@ -2,7 +2,7 @@ import { all, takeEvery } from 'redux-saga/effects';
 // import API from '../Services/Api'
 
 /* ------------- Types ------------- */
-import { LessonsTypes } from '../state/lessonsReducer';
+import { LessonsTypes } from '../containers/lessons/reducers';
 
 /* ------------- Sagas ------------- */
 import { getLessonsFlow } from './lessonsSaga';
