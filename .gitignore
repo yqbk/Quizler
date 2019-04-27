@@ -13,3 +13,4 @@ awsconfiguration.json
 packager-info.json
 package.jso
 yarn.lock
+.expo/*

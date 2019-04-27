@@ -13,6 +13,10 @@ import {
   ListItem,
   Body,
   Title,
+  Form,
+  Item,
+  Input,
+  Label,
 } from 'native-base';
 
 import { ListView } from 'react-native';
@@ -60,10 +64,38 @@ const LessonScreen = ({ navigation, removeLesson, cards, getCards, addCard }) =>
             </Button>
           )}
         />
+
+        <AddCardForm>
+          <View style={{ flex: 1 }}>
+            <Item floatingLabel style={{ flex: 1 }}>
+              <Label> Question </Label>
+              <Input />
+            </Item>
+            <Item floatingLabel style={{ flex: 1 }}>
+              <Label> Answer </Label>
+              <Input />
+            </Item>
+          </View>
+          <View style={{ flex: 0, marginLeft: 20 }}>
+            <Button rounded onPress={() => alert('test')}>
+              <Text> Add </Text>
+            </Button>
+          </View>
+        </AddCardForm>
+        <View
+          style={{
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 20,
+            flexDirection: 'row',
+          }}
+        >
+          <Spacer />
+          <Button danger block onPress={() => removeLesson(id)} style={{ flex: 1 }}>
+            <Text> Remove lesson </Text>
+          </Button>
+        </View>
       </Content>
-      <Button danger big onPress={() => removeLesson(id)}>
-        <Text> Delete lesson </Text>
-      </Button>
     </Container>
     // </LessonView>
   );
@@ -83,6 +115,20 @@ const LessonView = styled.View`
 const AnswerText = styled.Text`
   font-size: 12px;
   color: gray;
+`;
+
+export const Spacer = styled.View`
+  flex: 1;
+`;
+
+const AddCardForm = styled.View`
+  /* font-size: 12px;
+  color: gray; */
+  /* border: 1px solid black; */
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
 `;
 
 const mapStateToProps = state => ({
