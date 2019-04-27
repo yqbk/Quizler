@@ -5,9 +5,9 @@ import { all, takeEvery } from 'redux-saga/effects';
 import { LessonsTypes } from '../containers/lessons/reducers';
 
 /* ------------- Sagas ------------- */
-import { getLessonsFlow } from './lessonsSaga';
-import { addLessonFlow } from './lessonsSaga';
-import { removeLessonFlow } from './lessonsSaga';
+import { getLessonsFlow } from '../containers/lessons/sagas';
+import { addLessonFlow } from '../containers/lessons/sagas';
+import { removeLessonFlow } from '../containers/lessons/sagas';
 import { CardsTypes } from '../containers/cards/actions';
 import { getCardsFlow, addCardFlow, removeCardFlow } from '../containers/cards/sagas';
 

@@ -1,9 +1,9 @@
 import { call, put } from 'redux-saga/effects'
-import LessonsActions from '../containers/lessons/reducers'
+import LessonsActions from './reducers'
 import API, { graphqlOperation } from '@aws-amplify/api'
-import { listLessons } from '../src/graphql/queries'
-import { createLesson, deleteLesson } from '../src/graphql/mutations'
-import { goBack } from '../utils/actions'
+import { listLessons } from '../../src/graphql/queries'
+import { createLesson, deleteLesson } from '../../src/graphql/mutations'
+import { goBack } from '../../utils/actions'
 
 export function* getLessonsFlow() {
   try {
