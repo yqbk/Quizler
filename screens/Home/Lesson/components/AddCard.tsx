@@ -9,8 +9,8 @@ import { lifecycle, compose, withState, withHandlers } from 'recompose';
 import { View, FlatList } from 'react-native';
 import styled from 'styled-components';
 
-import CardsActions from '../../../containers/cards/actions';
-import { bindActionCreators } from '../../../utils/reduxUtils';
+import CardsActions from '../../../../containers/cards/actions';
+import { bindActionCreators } from '../../../../utils/reduxUtils';
 
 const AddCard = ({ lessonId, addCard, ask, setAsk, answer, setAnswer }) => {
   console.log('->', lessonId, ask, answer);

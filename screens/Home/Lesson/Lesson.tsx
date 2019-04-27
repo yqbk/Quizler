@@ -17,10 +17,10 @@ import { lifecycle, compose } from 'recompose'
 import { View } from 'react-native'
 import styled from 'styled-components'
 
-import LessonsActions from '../../containers/lessons/reducers'
-import CardsActions from '../../containers/cards/actions'
-import { bindActionCreators } from '../../utils/reduxUtils'
-import { cardsSelector } from '../../containers/cards/selector'
+import LessonsActions from '../../../containers/lessons/reducers'
+import CardsActions from '../../../containers/cards/actions'
+import { bindActionCreators } from '../../../utils/reduxUtils'
+import { cardsSelector } from '../../../containers/cards/selector'
 import AddCard from './components/AddCard'
 
 const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
