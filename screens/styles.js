@@ -1,12 +1,12 @@
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native'
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    
+
     backgroundColor: '#fff',
     justifyContent: 'flex-start',
     alignItems: 'center',
-    paddingVertical:30,
+    paddingVertical: 30,
   },
 
   input: {
@@ -20,9 +20,8 @@ export const styles = StyleSheet.create({
   },
 
   header: {
-    fontWeight: "900",
+    fontWeight: '900',
     fontSize: 32,
-
   },
 
   card: {
@@ -33,12 +32,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
-    // margin: 20,
   },
   text: {
-    // textAlign: 'center',
-    // fontSize: 50,
-    // backgroundColor: 'transparent',
     fontSize: 20,
     paddingTop: 10,
     paddingBottom: 10,
@@ -152,4 +147,4 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     color: '#2e78b7',
   },
-});
+})
