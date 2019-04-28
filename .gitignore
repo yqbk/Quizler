@@ -15,3 +15,4 @@ package.jso
 yarn.lock
 .expo/
 **/.expo
+.expo

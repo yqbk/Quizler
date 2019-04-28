@@ -33,8 +33,8 @@ import { lessonsSelector } from '../../containers/lessons/selector'
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
-    // header: null,
-    title: 'Lessons',
+    header: null,
+    // title: 'Lessons',
   }
 
   state = {
@@ -53,10 +53,10 @@ class HomeScreen extends React.Component {
     }
 
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, paddingTop: 50 }}>
         {lekcje && lekcje.length && (
           <FlatList
-            data={[{ isNew: true }, ...lekcje]}
+            data={[...lekcje, { isNew: true }]}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
               <Lesson

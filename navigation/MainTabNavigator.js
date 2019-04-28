@@ -15,18 +15,24 @@ import QuizScreen from '../screens/Home/Quiz/QuizScreen'
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
   Lesson: LessonScreen,
-  Quiz: QuizScreen,
+  Quiz: {
+    screen: QuizScreen,
+    navigationOptions: ({ navigation }) => ({
+      mode: 'modal',
+    }),
+  },
 })
 
-HomeStack.navigationOptions = {
-  tabBarLabel: 'Cards',
+HomeStack.navigationOptions = ({ navigation }) => ({
+  tabBarLabel: 'Quiz',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={Platform.OS === 'ios' ? 'ios-albums' : 'md-albums'}
     />
   ),
-}
+  tabBarVisible: navigation.state.index < 1,
+})
 
 const LinksStack = createStackNavigator({
   Links: LinksScreen,
@@ -56,8 +62,15 @@ SettingsStack.navigationOptions = {
   ),
 }
 
-export default createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  SettingsStack,
-})
+export default createBottomTabNavigator(
+  {
+    HomeStack,
+    LinksStack,
+    SettingsStack,
+  },
+  {
+    navigationOptions: ({ navigation }) => ({
+      tabBarVisible: false,
+    }),
+  },
+)

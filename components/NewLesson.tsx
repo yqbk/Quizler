@@ -4,6 +4,19 @@ import styled from 'styled-components'
 
 import LessonsActions from '../containers/lessons/reducers'
 
+import {
+  Container,
+  Content,
+  Button,
+  Text,
+  Icon,
+  List,
+  ListItem,
+  Card,
+  CardItem,
+  Body,
+} from 'native-base'
+
 import Amplify from '@aws-amplify/core'
 import config from '../aws-exports'
 Amplify.configure(config)
@@ -20,18 +33,22 @@ class NewLesson extends React.Component {
 
   render() {
     return (
-      <NewLessonWrapper>
-        <NewLessonInput
-          placeholder="enter text"
-          onChangeText={val => this.onChangeText('title', val)}
-          value={this.state.title}
-        />
-        <NewLessonButton
-          onPress={() => this.props.addLesson(this.state.title)}
-          title="Add Lesson!"
-          size={'small'}
-        />
-      </NewLessonWrapper>
+      <Card style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <CardItem
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        >
+          <NewLessonInput
+            placeholder="enter text"
+            onChangeText={val => this.onChangeText('title', val)}
+            value={this.state.title}
+          />
+          <NewLessonButton
+            onPress={() => this.props.addLesson(this.state.title)}
+            title="Add Lesson!"
+            size={'small'}
+          />
+        </CardItem>
+      </Card>
     )
   }
 }
@@ -48,6 +65,7 @@ export default connect(
 const NewLessonWrapper = styled.View`
   align-items: center;
   justify-content: center;
+  border: 1px solid black;
 `
 
 const NewLessonButton = styled.Button`

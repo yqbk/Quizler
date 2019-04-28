@@ -7,7 +7,9 @@ import {
   Icon,
   List,
   ListItem,
+  Card, CardItem, Body
 } from 'native-base'
+
 
 import { ListView, Alert } from 'react-native'
 
