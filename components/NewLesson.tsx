@@ -15,6 +15,9 @@ import {
   Card,
   CardItem,
   Body,
+  Input,
+  Item,
+  Label,
 } from 'native-base'
 
 import Amplify from '@aws-amplify/core'
@@ -35,18 +38,36 @@ class NewLesson extends React.Component {
     return (
       <Card style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
         <CardItem
-          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 30,
+          }}
         >
-          <NewLessonInput
-            placeholder="enter text"
-            onChangeText={val => this.onChangeText('title', val)}
-            value={this.state.title}
-          />
-          <NewLessonButton
+          <Item
+            floatingLabel
+            style={{
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: 8,
+            }}
+          >
+            <Label>New lesson title</Label>
+            <Input
+              onChangeText={val => this.onChangeText('title', val)}
+              value={this.state.title}
+            />
+          </Item>
+          <Button
+            block
             onPress={() => this.props.addLesson(this.state.title)}
-            title="Add Lesson!"
-            size={'small'}
-          />
+            disabled={!this.state.title}
+            style={{marginBottom: 12}}
+          >
+            <Text>Add lesson</Text>
+          </Button>
         </CardItem>
       </Card>
     )

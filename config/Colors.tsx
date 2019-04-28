@@ -11,7 +11,7 @@ const COLORS = {
   warningText: '#666804',
   noticeBackground: tintColor,
   noticeText: '#fff',
-  mainBlue: '#5EA3C2',
+  mainBlue: '#354A54',
   background: '#98AFBA'
 }
 

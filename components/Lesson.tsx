@@ -43,23 +43,16 @@ const Lesson = ({ lessonName, onPress, isNew }) => (
 )
 
 const LessonWrapper = styled.TouchableOpacity`
-  /* border: 1px solid #000000ab; */
   flex-direction: row;
   margin-horizontal: 16px;
   margin-vertical: 8px;
   height: 120px;
   align-items: center;
   justify-content: center;
-  /* border-radius: 5px; */
-  /* background-color: ${COLORS.background} */
-  /* box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23); */
-
-  /* background: ${props => (props.isNew ? `#000000ae` : `white`)}; */
 `
 
 const LessonTitle = styled.Text`
-  /* color: ${COLORS.mainBlue}; */
-  opacity: 0.75;
+  color: ${COLORS.mainBlue};
   font-size: 32px;
   text-align: center;
   flex: 1;
