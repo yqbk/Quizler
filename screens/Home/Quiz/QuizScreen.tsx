@@ -11,6 +11,9 @@ import {
   Icon,
 } from 'native-base'
 
+import Swiper from 'react-native-deck-swiper'
+import SwipeCards from 'react-native-swipe-cards'
+
 import { ListView, Alert } from 'react-native'
 
 import { connect } from 'react-redux'
@@ -29,6 +32,18 @@ import { bindActionCreators } from '../../../utils/reduxUtils'
 import { cardsSelector } from '../../../containers/cards/selector'
 import FlipCard from 'react-native-flip-card'
 
+Array.prototype.insert = function(index: number, item: Object): void {
+  this.splice(index, 0, item)
+}
+
+function shuffle(a) {
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[a[i], a[j]] = [a[j], a[i]]
+  }
+  return a
+}
+
 const QuizScreen = ({
   // navigation,
   removeLesson,
@@ -40,41 +55,83 @@ const QuizScreen = ({
   changeProgress,
 }) => {
   const handleSwipeLeft = item => {
-    // console.log('item', item)
+    console.log('item', item)
+    const cardsWithoutItem = cards.filter(card => card.id !== item.id)
+    console.log(
+      ' -> ',
+      item.id,
+      cardsWithoutItem.map(card => card.ask),
+      cards.map(card => card.ask),
+    )
+    setCards(cardsWithoutItem)
+    // console.log('=>', this._deckSwiper._root.props.dataSource.length)
   }
 
+  // repeat car
   const handleSwipeRight = item => {
-    // console.log('item', item)
-    const updatedCards = cards.filter(card => card.id !== item.id)
-    setCards(updatedCards)
-    console.log(' -> ', updatedCards, cards, cardsList)
+    const newIndex = Math.floor(Math.random() * (cards.length - 1))
+    const lessCards = cards.slice(1)
+    const firstItem = cards[0]
+    const shuffled = shuffle(cards.slice(1))
+    const cardsWithRepeatedItem = [firstItem, ...shuffled]
+    // debugger
+    setCards(cardsWithRepeatedItem)
+    console.log(
+      ' -> ',
+      cardsWithRepeatedItem.map(card => card.ask),
+      cards.map(card => card.ask),
+    )
+    // console.log('==', this._deckSwiper._root)
+    // console.log('=>', this._deckSwiper._root.props.dataSource.length)
     // changeProgress()
   }
 
+  // const handleYup = card => {
+  //   console.log(`Yup for ${card.text}`)
+
+  //   this.setState({
+  //     completed: this.state.completed + 1,
+  //   })
+  // }
+  // const handleNope = card => {
+  //   const shuffled = shuffle([...this.state.cards])
+
+  //   console.log(shuffled[0])
+
+  //   this.setState({
+  //     cards: shuffled,
+  //   })
+
+  //   console.log(`Nope for ${card.text}`)
+  // }
+  // const handleMaybe = card => {
+  //   this.setState({
+  //     cards: [...this.state.cards, card],
+  //   })
+
+  //   console.log(`Maybe for ${card.text}`)
+  // }
+
   return (
     <Container>
-      <Content
-        padder
-        contentContainerStyle={{
-          flexGrow: 1,
-        }}
-      >
-        <DeckSwiper
-          dataSource={Array.isArray(cards) ? cards : cardsList}
-          onSwipeLeft={handleSwipeLeft}
-          onSwipeRight={handleSwipeRight}
-          ref={c => (this._deckSwiper = c)}
-          looping={false}
-          renderEmpty={() => (
-            <View style={{ alignSelf: 'center' }}>
-              <Text>Over</Text>
-            </View>
-          )}
-          renderItem={item => (
+      {Array.isArray(cards) && (
+        <SwipeCards
+          cards={cards}
+          renderCard={item => (
             <Card
               style={{
                 flex: 1,
-                height: 500,
+                height: 300,
+                //
+                borderWidth: 1,
+                borderRadius: 2,
+                borderColor: '#ddd',
+                borderBottomWidth: 0,
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 2 },
+                shadowOpacity: 0.8,
+                shadowRadius: 2,
+                elevation: 1,
               }}
             >
               <CardItem
@@ -85,8 +142,8 @@ const QuizScreen = ({
                   justifyContent: 'center',
                 }}
               >
-                <Text>{item.ask}</Text>
-                {/* <FlipCard
+                {/* <Text>{item.ask}</Text> */}
+                <FlipCard
                   style={{
                     flex: 1,
                     borderColor: 'transparent',
@@ -109,36 +166,57 @@ const QuizScreen = ({
                   <CardBack>
                     <Text>{item.answer}</Text>
                   </CardBack>
-                </FlipCard> */}
+                </FlipCard>
               </CardItem>
             </Card>
           )}
+          renderNoMoreCards={() => (
+            <View>
+              <Text>No more cards</Text>
+            </View>
+          )}
+          handleYup={handleSwipeRight}
+          handleNope={handleSwipeLeft}
+          // handleMaybe={this.handleMaybe}
+          hasMaybeAction={false}
         />
-      </Content>
+      )}
+
+      <BottomView>
+        <Bar
+          progress={cards && cardsList && (cardsList.length - cards.length) / cardsList.length}
+          width={200}
+        />
+      </BottomView>
+
+      {/* <BottomView>
+        <Bar progress={0.3} width={200} />
+      </BottomView>
       <View
         style={{
           flexDirection: 'row',
-          flex: 1,
-          position: 'absolute',
-          bottom: 50,
-          left: 0,
-          right: 0,
+          flex: 0,
+          // position: 'absolute',
+          // bottom: 50,
+          // left: 0,
+          // right: 0,
           justifyContent: 'space-between',
           padding: 15,
         }}
       >
         <Button iconLeft onPress={() => this._deckSwiper._root.swipeLeft()}>
           <Icon name="arrow-back" />
-          <Text>Swipe Left</Text>
+          <Text>ok</Text>
         </Button>
-        <Button iconRight onPress={() => this._deckSwiper._root.swipeRight()}>
+        <Button
+          danger
+          iconRight
+          onPress={() => this._deckSwiper._root.swipeRight()}
+        >
+          <Text>Repeat</Text>
           <Icon name="arrow-forward" />
-          <Text>Swipe Right</Text>
         </Button>
-      </View>
-      <BottomView>
-        <Bar progress={0.3} width={200} />
-      </BottomView>
+      </View> */}
     </Container>
   )
 }
@@ -156,6 +234,7 @@ const BottomView = styled.View`
   justify-content: center;
   align-items: center;
   height: 50px;
+  border: 1px dashed red;
 `
 
 const CardBack = styled.View`
