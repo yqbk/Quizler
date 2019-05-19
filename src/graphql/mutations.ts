@@ -9,6 +9,7 @@ export const createUser = `mutation CreateUser($input: CreateUserInput!) {
       items {
         id
         title
+        successRatio
       }
       nextToken
     }
@@ -23,6 +24,7 @@ export const updateUser = `mutation UpdateUser($input: UpdateUserInput!) {
       items {
         id
         title
+        successRatio
       }
       nextToken
     }
@@ -37,6 +39,7 @@ export const deleteUser = `mutation DeleteUser($input: DeleteUserInput!) {
       items {
         id
         title
+        successRatio
       }
       nextToken
     }
@@ -47,6 +50,7 @@ export const createLesson = `mutation CreateLesson($input: CreateLessonInput!) {
   createLesson(input: $input) {
     id
     title
+    successRatio
     user {
       id
       name
@@ -69,6 +73,7 @@ export const updateLesson = `mutation UpdateLesson($input: UpdateLessonInput!) {
   updateLesson(input: $input) {
     id
     title
+    successRatio
     user {
       id
       name
@@ -91,6 +96,7 @@ export const deleteLesson = `mutation DeleteLesson($input: DeleteLessonInput!) {
   deleteLesson(input: $input) {
     id
     title
+    successRatio
     user {
       id
       name
@@ -117,6 +123,7 @@ export const createQuestion = `mutation CreateQuestion($input: CreateQuestionInp
     lesson {
       id
       title
+      successRatio
       user {
         id
         name
@@ -136,6 +143,7 @@ export const updateQuestion = `mutation UpdateQuestion($input: UpdateQuestionInp
     lesson {
       id
       title
+      successRatio
       user {
         id
         name
@@ -155,6 +163,7 @@ export const deleteQuestion = `mutation DeleteQuestion($input: DeleteQuestionInp
     lesson {
       id
       title
+      successRatio
       user {
         id
         name

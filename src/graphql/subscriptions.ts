@@ -9,6 +9,7 @@ export const onCreateUser = `subscription OnCreateUser {
       items {
         id
         title
+        successRatio
       }
       nextToken
     }
@@ -23,6 +24,7 @@ export const onUpdateUser = `subscription OnUpdateUser {
       items {
         id
         title
+        successRatio
       }
       nextToken
     }
@@ -37,6 +39,7 @@ export const onDeleteUser = `subscription OnDeleteUser {
       items {
         id
         title
+        successRatio
       }
       nextToken
     }
@@ -47,6 +50,7 @@ export const onCreateLesson = `subscription OnCreateLesson {
   onCreateLesson {
     id
     title
+    successRatio
     user {
       id
       name
@@ -69,6 +73,7 @@ export const onUpdateLesson = `subscription OnUpdateLesson {
   onUpdateLesson {
     id
     title
+    successRatio
     user {
       id
       name
@@ -91,6 +96,7 @@ export const onDeleteLesson = `subscription OnDeleteLesson {
   onDeleteLesson {
     id
     title
+    successRatio
     user {
       id
       name
@@ -117,6 +123,7 @@ export const onCreateQuestion = `subscription OnCreateQuestion {
     lesson {
       id
       title
+      successRatio
       user {
         id
         name
@@ -136,6 +143,7 @@ export const onUpdateQuestion = `subscription OnUpdateQuestion {
     lesson {
       id
       title
+      successRatio
       user {
         id
         name
@@ -155,6 +163,7 @@ export const onDeleteQuestion = `subscription OnDeleteQuestion {
     lesson {
       id
       title
+      successRatio
       user {
         id
         name
