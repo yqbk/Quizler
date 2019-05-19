@@ -9,6 +9,7 @@ export const getUser = `query GetUser($id: ID!) {
       items {
         id
         title
+        successRatio
       }
       nextToken
     }
@@ -36,6 +37,7 @@ export const getLesson = `query GetLesson($id: ID!) {
   getLesson(id: $id) {
     id
     title
+    successRatio
     user {
       id
       name
@@ -63,6 +65,7 @@ export const listLessons = `query ListLessons(
     items {
       id
       title
+      successRatio
       user {
         id
         name
@@ -83,6 +86,7 @@ export const getQuestion = `query GetQuestion($id: ID!) {
     lesson {
       id
       title
+      successRatio
       user {
         id
         name
@@ -107,6 +111,7 @@ export const listQuestions = `query ListQuestions(
       lesson {
         id
         title
+        successRatio
       }
     }
     nextToken

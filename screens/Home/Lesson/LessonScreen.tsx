@@ -7,9 +7,12 @@ import {
   Icon,
   List,
   ListItem,
+  Card,
+  CardItem,
+  Body,
 } from 'native-base'
 
-import { ListView } from 'react-native'
+import { ListView, Alert } from 'react-native'
 
 import { connect } from 'react-redux'
 import { lifecycle, compose } from 'recompose'
@@ -25,6 +28,21 @@ import AddCard from './components/AddCard'
 
 const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
 
+const removeLessonDialog = (className, removeLesson, id) =>
+  Alert.alert(
+    'Do you want to remove this class?',
+    `${className}`,
+    [
+      {
+        text: 'Cancel',
+        // onPress: () => null,
+        style: 'cancel',
+      },
+      { text: 'OK', onPress: () => removeLesson(id) },
+    ],
+    { cancelable: false },
+  )
+
 const LessonScreen = ({
   navigation,
   removeLesson,
@@ -33,8 +51,6 @@ const LessonScreen = ({
   removeCard,
 }) => {
   const { title, id } = navigation.getParam('lesson')
-
-  console.log('cards', cards)
 
   return (
     <Container>
@@ -71,11 +87,22 @@ const LessonScreen = ({
             flexDirection: 'row',
           }}
         >
-          <Spacer />
+          <Button
+            block
+            onPress={() =>
+              navigation.navigate('Quiz', {
+                lessonDetails: { id, title},
+              })
+            }
+            style={{ flex: 1 }}
+          >
+            <Text> Start lesson </Text>
+          </Button>
+
           <Button
             danger
             block
-            onPress={() => removeLesson(id)}
+            onPress={() => removeLessonDialog(title, removeLesson, id)}
             style={{ flex: 1 }}
           >
             <Text> Remove lesson </Text>

@@ -7,30 +7,39 @@ import {
 
 import TabBarIcon from '../components/TabBarIcon'
 import HomeScreen from '../screens/Home/HomeScreen'
-import LinksScreen from '../screens/Progress/LinksScreen'
+import ProgressScreen from '../screens/Progress/ProgressScreen'
 import SettingsScreen from '../screens/Settings/SettingsScreen'
-import LessonScreen from '../screens/Home/Lesson/Lesson'
+import LessonScreen from '../screens/Home/Lesson/LessonScreen'
+import QuizScreen from '../screens/Home/Quiz/QuizScreen'
 
 const HomeStack = createStackNavigator({
   Home: HomeScreen,
   Lesson: LessonScreen,
+  Quiz: {
+    screen: QuizScreen,
+    navigationOptions: ({ navigation }) => ({
+      mode: 'modal',
+    }),
+  },
 })
 
-HomeStack.navigationOptions = {
-  tabBarLabel: 'Cards',
+HomeStack.navigationOptions = ({ navigation }) => ({
+  tabBarLabel: 'Quiz',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
       name={Platform.OS === 'ios' ? 'ios-albums' : 'md-albums'}
     />
   ),
-}
-
-const LinksStack = createStackNavigator({
-  Links: LinksScreen,
+  tabBarVisible: navigation.state.index < 1,
 })
 
-LinksStack.navigationOptions = {
+// todo rename to progress stack
+const ProgressStack = createStackNavigator({
+  Progress: ProgressScreen,
+})
+
+ProgressStack.navigationOptions = {
   tabBarLabel: 'Progress',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -54,8 +63,15 @@ SettingsStack.navigationOptions = {
   ),
 }
 
-export default createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
-  SettingsStack,
-})
+export default createBottomTabNavigator(
+  {
+    HomeStack,
+    ProgressStack,
+    SettingsStack,
+  },
+  {
+    navigationOptions: ({ navigation }) => ({
+      tabBarVisible: false,
+    }),
+  },
+)

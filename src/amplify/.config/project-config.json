@@ -5,7 +5,7 @@
     "javascript": {
         "framework": "react-native",
         "config": {
-            "SourceDir": "/",
+            "SourceDir": "../../",
             "DistributionDir": "/",
             "BuildCommand": "npm run-script build",
             "StartCommand": "npm run-script start"

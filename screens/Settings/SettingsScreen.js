@@ -1,44 +1,45 @@
 import React from 'react'
 import { ExpoConfigView } from '@expo/samples'
 import { Auth } from 'aws-amplify'
-import { ScrollView, Button, View, Text } from 'react-native'
+import { ScrollView, View, StyleSheet } from 'react-native'
+import { Button, Text } from 'native-base'
 
 export default class SettingsScreen extends React.Component {
   static navigationOptions = {
-    title: 'app.json',
+    title: 'Settings',
   }
-
+  
   constructor(props) {
     super(props)
   }
 
   render() {
-    /* Go ahead and delete ExpoConfigView and replace it with your
-     * content, we just wanted to give you a quick view of your config */
     return (
-      <ScrollView>
-        <View
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: 16,
+      <View style={styles.container}>
+        <ExpoConfigView />
+
+        <Button
+          block
+          onPress={() => {
+            Auth.signOut()
+              .then(data => console.log(data))
+              .then(() => this.props.onStateChange('signedOut', null))
+              .catch(err => console.log(err))
           }}
+          style={{ margin: 40 }}
         >
-          {/* <Text>Sign out</Text> */}
-          <Button
-            onPress={() => {
-              console.log('Sign out')
-              Auth.signOut()
-                .then(data => console.log(data))
-                .then(() => this.props.onStateChange('signedOut', null))
-                // .catch(err => this.error(err));
-                .catch(err => console.log(err))
-            }}
-            title="Sign out"
-          />
-        </View>
-        {/* <ExpoConfigView />; */}
-      </ScrollView>
+          <Text>Logout</Text>
+        </Button>
+      </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+})

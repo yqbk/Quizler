@@ -33,8 +33,8 @@ import { lessonsSelector } from '../../containers/lessons/selector'
 
 class HomeScreen extends React.Component {
   static navigationOptions = {
-    // header: null,
-    title: 'Lessons',
+    header: null,
+    // title: 'Lessons',
   }
 
   state = {
@@ -47,19 +47,17 @@ class HomeScreen extends React.Component {
   }
 
   render() {
-    console.log('=> ', this.props.lessons)
     let lekcje = null
     if (this.props.lessons && this.props.lessons.length) {
       lekcje = this.props.lessons.filter(item => item.id && item.title)
-      lekcje.map(lekcja => console.log(lekcja.title))
     }
 
     return (
-      <View>
+      <View style={{ flex: 1, paddingTop: 50 }}>
         {lekcje && lekcje.length && (
           <FlatList
-            data={[{ isNew: true }, ...lekcje]}
-            keyExtractor={this._keyExtractor}
+            data={[...lekcje, { isNew: true }]}
+            keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
               <Lesson
                 lessonName={item.title}

@@ -18,12 +18,14 @@ export type DeleteUserInput = {
 export type CreateLessonInput = {
   id?: string | null,
   title: string,
+  successRatio?: Array< number | null > | null,
   lessonUserId?: string | null,
 };
 
 export type UpdateLessonInput = {
   id: string,
   title?: string | null,
+  successRatio?: Array< number | null > | null,
   lessonUserId?: string | null,
 };
 
@@ -86,9 +88,22 @@ export type ModelStringFilterInput = {
 export type ModelLessonFilterInput = {
   id?: ModelIDFilterInput | null,
   title?: ModelStringFilterInput | null,
+  successRatio?: ModelFloatFilterInput | null,
   and?: Array< ModelLessonFilterInput | null > | null,
   or?: Array< ModelLessonFilterInput | null > | null,
   not?: ModelLessonFilterInput | null,
+};
+
+export type ModelFloatFilterInput = {
+  ne?: number | null,
+  eq?: number | null,
+  le?: number | null,
+  lt?: number | null,
+  ge?: number | null,
+  gt?: number | null,
+  contains?: number | null,
+  notContains?: number | null,
+  between?: Array< number | null > | null,
 };
 
 export type ModelQuestionFilterInput = {
@@ -115,6 +130,7 @@ export type CreateUserMutation = {
         __typename: "Lesson",
         id: string,
         title: string,
+        successRatio: Array< number | null > | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -136,6 +152,7 @@ export type UpdateUserMutation = {
         __typename: "Lesson",
         id: string,
         title: string,
+        successRatio: Array< number | null > | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -157,6 +174,7 @@ export type DeleteUserMutation = {
         __typename: "Lesson",
         id: string,
         title: string,
+        successRatio: Array< number | null > | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -172,6 +190,7 @@ export type CreateLessonMutation = {
     __typename: "Lesson",
     id: string,
     title: string,
+    successRatio: Array< number | null > | null,
     user:  {
       __typename: "User",
       id: string,
@@ -203,6 +222,7 @@ export type UpdateLessonMutation = {
     __typename: "Lesson",
     id: string,
     title: string,
+    successRatio: Array< number | null > | null,
     user:  {
       __typename: "User",
       id: string,
@@ -234,6 +254,7 @@ export type DeleteLessonMutation = {
     __typename: "Lesson",
     id: string,
     title: string,
+    successRatio: Array< number | null > | null,
     user:  {
       __typename: "User",
       id: string,
@@ -270,6 +291,7 @@ export type CreateQuestionMutation = {
       __typename: "Lesson",
       id: string,
       title: string,
+      successRatio: Array< number | null > | null,
       user:  {
         __typename: "User",
         id: string,
@@ -297,6 +319,7 @@ export type UpdateQuestionMutation = {
       __typename: "Lesson",
       id: string,
       title: string,
+      successRatio: Array< number | null > | null,
       user:  {
         __typename: "User",
         id: string,
@@ -324,6 +347,7 @@ export type DeleteQuestionMutation = {
       __typename: "Lesson",
       id: string,
       title: string,
+      successRatio: Array< number | null > | null,
       user:  {
         __typename: "User",
         id: string,
@@ -352,6 +376,7 @@ export type GetUserQuery = {
         __typename: "Lesson",
         id: string,
         title: string,
+        successRatio: Array< number | null > | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -389,6 +414,7 @@ export type GetLessonQuery = {
     __typename: "Lesson",
     id: string,
     title: string,
+    successRatio: Array< number | null > | null,
     user:  {
       __typename: "User",
       id: string,
@@ -424,6 +450,7 @@ export type ListLessonsQuery = {
       __typename: "Lesson",
       id: string,
       title: string,
+      successRatio: Array< number | null > | null,
       user:  {
         __typename: "User",
         id: string,
@@ -452,6 +479,7 @@ export type GetQuestionQuery = {
       __typename: "Lesson",
       id: string,
       title: string,
+      successRatio: Array< number | null > | null,
       user:  {
         __typename: "User",
         id: string,
@@ -483,6 +511,7 @@ export type ListQuestionsQuery = {
         __typename: "Lesson",
         id: string,
         title: string,
+        successRatio: Array< number | null > | null,
       } | null,
     } | null > | null,
     nextToken: string | null,
@@ -500,6 +529,7 @@ export type OnCreateUserSubscription = {
         __typename: "Lesson",
         id: string,
         title: string,
+        successRatio: Array< number | null > | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -517,6 +547,7 @@ export type OnUpdateUserSubscription = {
         __typename: "Lesson",
         id: string,
         title: string,
+        successRatio: Array< number | null > | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -534,6 +565,7 @@ export type OnDeleteUserSubscription = {
         __typename: "Lesson",
         id: string,
         title: string,
+        successRatio: Array< number | null > | null,
       } | null > | null,
       nextToken: string | null,
     } | null,
@@ -545,6 +577,7 @@ export type OnCreateLessonSubscription = {
     __typename: "Lesson",
     id: string,
     title: string,
+    successRatio: Array< number | null > | null,
     user:  {
       __typename: "User",
       id: string,
@@ -572,6 +605,7 @@ export type OnUpdateLessonSubscription = {
     __typename: "Lesson",
     id: string,
     title: string,
+    successRatio: Array< number | null > | null,
     user:  {
       __typename: "User",
       id: string,
@@ -599,6 +633,7 @@ export type OnDeleteLessonSubscription = {
     __typename: "Lesson",
     id: string,
     title: string,
+    successRatio: Array< number | null > | null,
     user:  {
       __typename: "User",
       id: string,
@@ -631,6 +666,7 @@ export type OnCreateQuestionSubscription = {
       __typename: "Lesson",
       id: string,
       title: string,
+      successRatio: Array< number | null > | null,
       user:  {
         __typename: "User",
         id: string,
@@ -654,6 +690,7 @@ export type OnUpdateQuestionSubscription = {
       __typename: "Lesson",
       id: string,
       title: string,
+      successRatio: Array< number | null > | null,
       user:  {
         __typename: "User",
         id: string,
@@ -677,6 +714,7 @@ export type OnDeleteQuestionSubscription = {
       __typename: "Lesson",
       id: string,
       title: string,
+      successRatio: Array< number | null > | null,
       user:  {
         __typename: "User",
         id: string,
