@@ -30,6 +30,8 @@ const QuizScreen = ({
   setInitialCardsNumber,
   initialCardsNumber,
   navigation,
+  repeatedCards,
+  setRepeatedCards,
 }) => {
   const lessonDetails = navigation.getParam('lessonDetails')
 
@@ -37,6 +39,8 @@ const QuizScreen = ({
 
   const handleSwipeLeft = item => {
     setCards(shuffle([...cards]))
+
+    setRepeatedCards([...new Set([...repeatedCards, item.id])])
 
     Analytics.record({
       name: 'Swipe left - difficult',
@@ -66,6 +70,7 @@ const QuizScreen = ({
   const handleSwipeUp = item => {
     setCards(shuffle([...cards, item, item]))
     setInitialCardsNumber((initialCardsNumber += 2))
+    setRepeatedCards([...new Set([...repeatedCards, item.id])])
 
     Analytics.record({
       name: 'Swipe up - very hard',
@@ -124,7 +129,7 @@ const QuizScreen = ({
           )}
           renderNoMoreCards={() => (
             <View>
-              <VeryBigText>No more cards! 👏</VeryBigText>
+              <VeryBigText>`{`No more cards! 👏 ${repeatedCards}`}</VeryBigText>
             </View>
           )}
           handleYup={handleSwipeRight}
@@ -203,6 +208,7 @@ const mapDispatchToProps = bindActionCreators({
 
 export default compose(
   withState('cards', 'setCards', ''),
+  withState('repeatedCards', 'setRepeatedCards', ''),
   withState('initialCardsNumber', 'setInitialCardsNumber', 0),
   withHandlers({
     changeAsk: ({ setCards }) => () => setCards(cards => cards),
