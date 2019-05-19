@@ -8,7 +8,7 @@ import Analytics from '@aws-amplify/analytics'
 import { connect } from 'react-redux'
 import { lifecycle, compose, withState, withHandlers } from 'recompose'
 
-import { View } from 'react-native'
+import { View, Dimensions } from 'react-native'
 import styled from 'styled-components'
 
 import { bindActionCreators } from '../../../utils/reduxUtils'
@@ -74,7 +74,6 @@ const QuizScreen = ({
         lessonTitle: lessonDetails.title,
         cardId: item.id,
         ask: item.ask,
-        // lesson Id
       },
     })
   }
@@ -84,24 +83,10 @@ const QuizScreen = ({
       {Array.isArray(cards) && (
         <SwipeCards
           cards={cards}
-          // containerStyle={{ padding: 62, borderWidth: 5, borderColor: 'red' }}
           renderCard={item => (
-            <Card
+            <View
               style={{
-                // flex: 1,
-                height: 300,
-                width: 300,
-                // margin: 64,
-                //
-                // borderWidth: 1,
-                // borderRadius: 2,
-                // borderColor: '#ddd',
-                // borderBottomWidth: 0,
-                // shadowColor: '#000',
-                // shadowOffset: { width: 0, height: 2 },
-                // shadowOpacity: 0.8,
-                // shadowRadius: 2,
-                // elevation: 1,
+                paddingVertical: 50,
               }}
             >
               <CardItem
@@ -110,14 +95,15 @@ const QuizScreen = ({
                   flex: 1,
                   alignItems: 'center',
                   justifyContent: 'center',
+                  borderColor: 'transparent',
                 }}
               >
                 <FlipCard
                   style={{
                     flex: 1,
                     borderColor: 'transparent',
-                    width: 350,
-                    elevation: 3,
+                    width: Dimensions.get('window').width - 40,
+                    height: Dimensions.get('window').height - 40,
                   }}
                   friction={6}
                   perspective={1000}
@@ -126,19 +112,19 @@ const QuizScreen = ({
                   clickable
                 >
                   <CardFace>
-                    <Text>{item.ask}</Text>
+                    <BigText>{item.ask}</BigText>
                   </CardFace>
 
                   <CardBack>
-                    <Text>{item.answer}</Text>
+                    <BigText>{item.answer}</BigText>
                   </CardBack>
                 </FlipCard>
               </CardItem>
-            </Card>
+            </View>
           )}
           renderNoMoreCards={() => (
             <View>
-              <Text>No more cards</Text>
+              <VeryBigText>No more cards! 👏</VeryBigText>
             </View>
           )}
           handleYup={handleSwipeRight}
@@ -159,10 +145,10 @@ const QuizScreen = ({
               ? (initialCardsNumber - cards.length) / initialCardsNumber
               : 0
           }
-          width={200}
+          width={Dimensions.get('window').width * 0.6}
         />
-        <Text>{`${initialCardsNumber -
-          cards.length}/${initialCardsNumber}`}</Text>
+        <SmallText>{`${initialCardsNumber -
+          cards.length} / ${initialCardsNumber}`}</SmallText>
       </BottomView>
     </Container>
   )
@@ -172,24 +158,39 @@ const CardFace = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-  border: 3px solid blue;
-  border-radius: 3px;
-`
-
-const BottomView = styled.View`
-  /* flex: 0; */
-  justify-content: center;
-  align-items: center;
-  height: 50px;
-  /* border: 1px dashed red; */
+  border: 2px solid rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
 `
 
 const CardBack = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-  border: 3px solid red;
-  border-radius: 3px;
+  border: 2px solid transparent;
+  border-radius: 2px;
+  background-color: rgba(0, 0, 255, 0.15);
+`
+
+const BottomView = styled.View`
+  justify-content: center;
+  align-items: center;
+  height: 70px;
+`
+
+const SmallText = styled.Text`
+  font-size: 14px;
+  font-weight: 700;
+  padding-top: 10px;
+`
+
+const BigText = styled.Text`
+  font-size: 28px;
+  font-family: 'lato';
+`
+
+const VeryBigText = styled.Text`
+  font-size: 36px;
+  font-weight: 700;
 `
 
 const mapStateToProps = state => ({
