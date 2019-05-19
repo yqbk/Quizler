@@ -7,7 +7,7 @@ import {
 
 import TabBarIcon from '../components/TabBarIcon'
 import HomeScreen from '../screens/Home/HomeScreen'
-import LinksScreen from '../screens/Progress/LinksScreen'
+import ProgressScreen from '../screens/Progress/ProgressScreen'
 import SettingsScreen from '../screens/Settings/SettingsScreen'
 import LessonScreen from '../screens/Home/Lesson/LessonScreen'
 import QuizScreen from '../screens/Home/Quiz/QuizScreen'
@@ -34,11 +34,12 @@ HomeStack.navigationOptions = ({ navigation }) => ({
   tabBarVisible: navigation.state.index < 1,
 })
 
-const LinksStack = createStackNavigator({
-  Links: LinksScreen,
+// todo rename to progress stack
+const ProgressStack = createStackNavigator({
+  Progress: ProgressScreen,
 })
 
-LinksStack.navigationOptions = {
+ProgressStack.navigationOptions = {
   tabBarLabel: 'Progress',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
@@ -65,7 +66,7 @@ SettingsStack.navigationOptions = {
 export default createBottomTabNavigator(
   {
     HomeStack,
-    LinksStack,
+    ProgressStack,
     SettingsStack,
   },
   {
