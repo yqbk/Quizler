@@ -6,6 +6,7 @@ type User @model {
 type Lesson @model {
   id: ID!
   title: String!
+  successRatio: [Float]
   user: User @connection(name: "UserLessons")
   questions: [Question] @connection(name: "LessonQuestions")
 }
