@@ -7,9 +7,10 @@ import {
   Icon,
   List,
   ListItem,
-  Card, CardItem, Body
+  Card,
+  CardItem,
+  Body,
 } from 'native-base'
-
 
 import { ListView, Alert } from 'react-native'
 
@@ -88,7 +89,11 @@ const LessonScreen = ({
         >
           <Button
             block
-            onPress={() => navigation.navigate('Quiz')}
+            onPress={() =>
+              navigation.navigate('Quiz', {
+                lessonDetails: { id, title},
+              })
+            }
             style={{ flex: 1 }}
           >
             <Text> Start lesson </Text>

@@ -3,6 +3,7 @@ import { Bar } from 'react-native-progress'
 import { Container, Text, Card, CardItem } from 'native-base'
 
 import SwipeCards from 'react-native-swipe-cards'
+import Analytics from '@aws-amplify/analytics'
 
 import { connect } from 'react-redux'
 import { lifecycle, compose, withState, withHandlers } from 'recompose'
@@ -22,14 +23,60 @@ const shuffle = (a: Array<Object>) => {
   return a
 }
 
-const QuizScreen = ({ cards, cardsList, setCards }) => {
+const QuizScreen = ({
+  cards,
+  cardsList,
+  setCards,
+  setInitialCardsNumber,
+  initialCardsNumber,
+  navigation,
+}) => {
+  const lessonDetails = navigation.getParam('lessonDetails')
+
+  console.log('lessonDetails', lessonDetails)
+
   const handleSwipeLeft = item => {
     setCards(shuffle([...cards]))
+
+    Analytics.record({
+      name: 'Swipe left - difficult',
+      attributes: {
+        lessonId: lessonDetails.id,
+        lessonTitle: lessonDetails.title,
+        cardId: item.id,
+        ask: item.ask,
+      },
+    })
   }
 
   const handleSwipeRight = item => {
-    const cardsWithoutItem = cards.filter(card => card.id !== item.id)
-    setCards(cardsWithoutItem)
+    setCards(cards.slice(1))
+
+    Analytics.record({
+      name: 'Swipe right - easy',
+      attributes: {
+        lessonId: lessonDetails.id,
+        lessonTitle: lessonDetails.title,
+        cardId: item.id,
+        ask: item.ask,
+      },
+    })
+  }
+
+  const handleSwipeUp = item => {
+    setCards(shuffle([...cards, item, item]))
+    setInitialCardsNumber((initialCardsNumber += 2))
+
+    Analytics.record({
+      name: 'Swipe up - very hard',
+      attributes: {
+        lessonId: lessonDetails.id,
+        lessonTitle: lessonDetails.title,
+        cardId: item.id,
+        ask: item.ask,
+        // lesson Id
+      },
+    })
   }
 
   return (
@@ -38,8 +85,6 @@ const QuizScreen = ({ cards, cardsList, setCards }) => {
         <SwipeCards
           cards={cards}
           // containerStyle={{ padding: 62, borderWidth: 5, borderColor: 'red' }}
-          yupText="Ok"
-          noText="Repeat"
           renderCard={item => (
             <Card
               style={{
@@ -98,20 +143,26 @@ const QuizScreen = ({ cards, cardsList, setCards }) => {
           )}
           handleYup={handleSwipeRight}
           handleNope={handleSwipeLeft}
-          // handleMaybe={this.handleMaybe}
-          hasMaybeAction={false}
+          handleMaybe={handleSwipeUp}
+          hasMaybeAction
+          yupText="Ok 👌"
+          nopeText="Repeat 🤔"
+          maybeText={'It is really hard! 🤯'}
+          onClickHandler={() => {}}
         />
       )}
 
       <BottomView>
         <Bar
           progress={
-            cards &&
-            cardsList &&
-            (cardsList.length - cards.length) / cardsList.length
+            initialCardsNumber && cards
+              ? (initialCardsNumber - cards.length) / initialCardsNumber
+              : 0
           }
           width={200}
         />
+        <Text>{`${initialCardsNumber -
+          cards.length}/${initialCardsNumber}`}</Text>
       </BottomView>
     </Container>
   )
@@ -130,7 +181,7 @@ const BottomView = styled.View`
   justify-content: center;
   align-items: center;
   height: 50px;
-  border: 1px dashed red;
+  /* border: 1px dashed red; */
 `
 
 const CardBack = styled.View`
@@ -151,6 +202,7 @@ const mapDispatchToProps = bindActionCreators({
 
 export default compose(
   withState('cards', 'setCards', ''),
+  withState('initialCardsNumber', 'setInitialCardsNumber', 0),
   withHandlers({
     changeAsk: ({ setCards }) => () => setCards(cards => cards),
   }),
@@ -161,6 +213,7 @@ export default compose(
   lifecycle({
     componentDidMount() {
       this.props.setCards(this.props.cardsList)
+      this.props.setInitialCardsNumber(this.props.cardsList.length)
     },
   }),
 )(QuizScreen)
