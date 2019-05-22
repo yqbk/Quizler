@@ -47,30 +47,28 @@ class HomeScreen extends React.Component {
   }
 
   render() {
-    let lekcje = null
+    let lekcje = []
     if (this.props.lessons && this.props.lessons.length) {
       lekcje = this.props.lessons.filter(item => item.id && item.title)
     }
 
     return (
       <View style={{ flex: 1, paddingTop: 50 }}>
-        {lekcje && lekcje.length && (
-          <FlatList
-            data={[...lekcje, { isNew: true }]}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <Lesson
-                lessonName={item.title}
-                isNew={item.isNew}
-                onPress={() => {
-                  this.props.navigation.navigate('Lesson', {
-                    lesson: item,
-                  })
-                }}
-              />
-            )}
-          />
-        )}
+        <FlatList
+          data={[...lekcje, { isNew: true }]}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <Lesson
+              lessonName={item.title}
+              isNew={item.isNew}
+              onPress={() => {
+                this.props.navigation.navigate('Lesson', {
+                  lesson: item,
+                })
+              }}
+            />
+          )}
+        />
       </View>
     )
   }
