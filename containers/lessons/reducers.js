@@ -92,7 +92,7 @@ export const updateLessonSuccess = (state, action) => {
       ...state.lessons.filter(
         lesson => lesson.id !== action.response.updateLesson.id,
       ),
-      { ...action.response.updateLesson },
+      { ...action.response.updateLesson,  },
     ],
   })
 }

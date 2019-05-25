@@ -112,11 +112,10 @@ export function* updateLessonFlow({ title, id, successRatio } = {}) {
 
     const graphqlData1 = yield call(getCurrentLessonApi)
 
-    const currentDataSuccessRatio = _get(
-      graphqlData1,
-      ['data', 'getLesson', 'successRatio'],
-      [],
-    )
+    const currentDataSuccessRatio =
+      _get(graphqlData1, ['data', 'getLesson', 'successRatio']) || []
+
+    // debugger
 
     // ---------
 
@@ -133,7 +132,6 @@ export function* updateLessonFlow({ title, id, successRatio } = {}) {
     const graphqlData = yield call(updateLessonApi)
 
     const response = graphqlData.data
-
 
     if (response) {
       yield put(LessonsActions.updateLessonSuccess(response))
