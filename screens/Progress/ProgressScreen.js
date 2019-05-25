@@ -1,31 +1,50 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { ScrollView, StyleSheet, View, Text, Dimensions } from 'react-native'
+import { progressSelector } from '../../containers/lessons/selector'
 import {
   LineChart,
   ProgressChart,
   ContributionGraph,
   StackedBarChart,
 } from 'react-native-chart-kit'
+import { lessonsSelector } from '../../containers/lessons/selector'
 
-export default class ProgressScreen extends React.Component {
+class ProgressScreen extends React.Component {
   static navigationOptions = {
     title: 'Progress',
   }
 
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.chartsContainer}>
-          <LineChart
-            width={CHART_WIDTH}
-            height={CHART_HEIGHT}
-            data={lineChartData}
-            chartConfig={chartConfig}
-            bezier
-            fromZero
-          />
+      <ScrollView>
+        {this.props.progressData.map(chart => (
+          <View styles={styles.chartsContainer} key={chart.title}>
+            <Text
+              style={{
+                color: 'black',
+                fontSize: 18,
+                fontWeight: '700',
+                paddingLeft: 16,
+                paddingTop: 32,
+                paddingBottom: 16,
+              }}
+            >
+              {chart.title}
+            </Text>
 
-          <View style={{ marginBottom: 24 }} />
+            <LineChart
+              width={CHART_WIDTH}
+              height={CHART_HEIGHT}
+              data={{ labels: chart.labels, datasets: chart.datasets }}
+              chartConfig={chartConfig}
+              bezier
+              fromZero
+            />
+          </View>
+        ))}
+
+        {/* <View style={{ marginBottom: 24 }} />
 
           <ContributionGraph
             values={commitsData}
@@ -34,26 +53,27 @@ export default class ProgressScreen extends React.Component {
             width={CHART_WIDTH}
             height={CHART_HEIGHT}
             chartConfig={chartConfig}
-          />
-        </View>
-      </View>
+          /> */}
+      </ScrollView>
     )
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingVertical: 24,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+const mapStateToProps = state => ({
+  progressData: progressSelector()(state),
+})
+//
+export default connect(
+  mapStateToProps,
+  null,
+)(ProgressScreen)
 
+const styles = StyleSheet.create({
   chartsContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    borderBottomWidth: 3,
   },
 })
 
@@ -65,23 +85,7 @@ const chartConfig = {
   backgroundGradientFrom: '#ffffff',
   backgroundGradientTo: '#ffffff',
   color: (opacity = 1) => `rgba(0,0,0, ${opacity})`,
-  style: {},
-}
-
-const lineChartData = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June'],
-  datasets: [
-    {
-      data: [
-        Math.random() * 100,
-        Math.random() * 100,
-        Math.random() * 100,
-        Math.random() * 100,
-        Math.random() * 100,
-        Math.random() * 100,
-      ],
-    },
-  ],
+  style: { paddingBottom: 32, borderBottomWidth: 3 },
 }
 
 const commitsData = [

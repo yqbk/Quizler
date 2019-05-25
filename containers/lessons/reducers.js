@@ -11,6 +11,10 @@ const { Types, Creators } = createActions({
   addLessonSuccess: ['response'],
   addLessonFailure: ['error'],
 
+  updateLessonRequest: ['title', 'id', 'successRatio'],
+  updateLessonSuccess: ['response'],
+  updateLessonFailure: ['error'],
+
   removeLessonRequest: ['id'],
   removeLessonSuccess: ['id'],
   removeLessonFailure: ['error'],
@@ -75,6 +79,34 @@ export const addLessonFailure = (state, action) => {
 
 // ----
 
+export const updateLessonRequest = (state, action) => {
+  return state.merge({ fetching: true, error: false, errorMessage: '' })
+}
+
+export const updateLessonSuccess = (state, action) => {
+  return state.merge({
+    fetching: false,
+    error: false,
+    errorMessage: '',
+    lessons: [
+      ...state.lessons.filter(
+        lesson => lesson.id !== action.response.updateLesson.id,
+      ),
+      { ...action.response.updateLesson,  },
+    ],
+  })
+}
+
+export const updateLessonFailure = (state, action) => {
+  return state.merge({
+    fetching: false,
+    error: true,
+    errorMessage: action.error,
+  })
+}
+
+// ----
+
 export const removeLessonRequest = (state, action) => {
   return state.merge({ fetching: true, error: false, errorMessage: '' })
 }
@@ -105,6 +137,10 @@ export const reducer = createReducer(INITIAL_STATE, {
   [Types.ADD_LESSON_REQUEST]: addLessonRequest,
   [Types.ADD_LESSON_SUCCESS]: addLessonSuccess,
   [Types.ADD_LESSON_FAILURE]: addLessonFailure,
+
+  [Types.UPDATE_LESSON_REQUEST]: updateLessonRequest,
+  [Types.UPDATE_LESSON_SUCCESS]: updateLessonSuccess,
+  [Types.UPDATE_LESSON_FAILURE]: updateLessonFailure,
 
   [Types.REMOVE_LESSON_REQUEST]: removeLessonRequest,
   [Types.REMOVE_LESSON_SUCCESS]: removeLessonSuccess,

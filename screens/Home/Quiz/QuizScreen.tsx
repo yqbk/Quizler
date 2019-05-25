@@ -1,19 +1,27 @@
 import React from 'react'
 import { Bar } from 'react-native-progress'
-import { Container, Text, Card, CardItem } from 'native-base'
+import { Container, Text, Card, CardItem, Button } from 'native-base'
 
 import SwipeCards from 'react-native-swipe-cards'
 import Analytics from '@aws-amplify/analytics'
+import LessonsActions from '../../../containers/lessons/reducers'
 
 import { connect } from 'react-redux'
-import { lifecycle, compose, withState, withHandlers } from 'recompose'
+import {
+  lifecycle,
+  compose,
+  withState,
+  withHandlers,
+  withPropsOnChange,
+} from 'recompose'
 
-import { View, Dimensions } from 'react-native'
+import { View, Dimensions, Alert } from 'react-native'
 import styled from 'styled-components'
 
 import { bindActionCreators } from '../../../utils/reduxUtils'
 import { cardsSelector } from '../../../containers/cards/selector'
 import FlipCard from 'react-native-flip-card'
+import { lessonSelector } from '../../../containers/lessons/selector'
 
 const shuffle = (a: Array<Object>) => {
   for (let i = a.length - 1; i > 0; i--) {
@@ -32,6 +40,8 @@ const QuizScreen = ({
   navigation,
   repeatedCards,
   setRepeatedCards,
+  result,
+  updateLesson,
 }) => {
   const lessonDetails = navigation.getParam('lessonDetails')
 
@@ -129,7 +139,16 @@ const QuizScreen = ({
           )}
           renderNoMoreCards={() => (
             <View>
-              <VeryBigText>`{`No more cards! 👏 ${repeatedCards}`}</VeryBigText>
+              <VeryBigText>
+                {`No more cards! 👏 \n\nResult: ${result * 100}%`}
+              </VeryBigText>
+              <Button
+                block
+                onPress={() => navigation.goBack()}
+                style={{ marginTop: 32 }}
+              >
+                <ButtonText>Go back</ButtonText>
+              </Button>
             </View>
           )}
           handleYup={handleSwipeRight}
@@ -158,6 +177,49 @@ const QuizScreen = ({
     </Container>
   )
 }
+
+const mapStateToProps = state => ({
+  cardsList: cardsSelector(state),
+})
+
+const mapDispatchToProps = bindActionCreators({
+  updateLesson: (title, id, successRatio) =>
+    LessonsActions.updateLessonRequest(title, id, successRatio),
+})
+
+export default compose(
+  withState('cards', 'setCards', ''),
+  withState('repeatedCards', 'setRepeatedCards', []),
+  withState('initialCardsNumber', 'setInitialCardsNumber', 0),
+  withHandlers({
+    changeAsk: ({ setCards }) => () => setCards(cards => cards),
+  }),
+  connect(
+    mapStateToProps,
+    mapDispatchToProps,
+  ),
+  withPropsOnChange(['repeatedCards'], ({ repeatedCards, cardsList }) => ({
+    result: (
+      (cardsList.length - repeatedCards.length) /
+      cardsList.length
+    ).toFixed(2),
+  })),
+  lifecycle({
+    componentDidMount() {
+      this.props.setCards(this.props.cardsList)
+      this.props.setInitialCardsNumber(this.props.cardsList.length)
+    },
+
+    componentWillUnmount() {
+      const { title, id } = this.props.navigation.getParam('lessonDetails')
+      // const test = this.props.lessonData
+
+      this.props.updateLesson(title, id, this.props.result)
+      console.log('Wynik', this.props.result)
+      Alert.alert(`Wynik: ${this.props.result}`)
+    },
+  }),
+)(QuizScreen)
 
 const CardFace = styled.View`
   flex: 1;
@@ -188,6 +250,12 @@ const SmallText = styled.Text`
   padding-top: 10px;
 `
 
+const ButtonText = styled.Text`
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+`
+
 const BigText = styled.Text`
   font-size: 28px;
   font-family: 'lato';
@@ -196,31 +264,7 @@ const BigText = styled.Text`
 const VeryBigText = styled.Text`
   font-size: 36px;
   font-weight: 700;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
 `
-
-const mapStateToProps = state => ({
-  cardsList: cardsSelector(state),
-})
-
-const mapDispatchToProps = bindActionCreators({
-  // removeCard: cardId => CardsActions.removeCardRequest(cardId),
-})
-
-export default compose(
-  withState('cards', 'setCards', ''),
-  withState('repeatedCards', 'setRepeatedCards', ''),
-  withState('initialCardsNumber', 'setInitialCardsNumber', 0),
-  withHandlers({
-    changeAsk: ({ setCards }) => () => setCards(cards => cards),
-  }),
-  connect(
-    mapStateToProps,
-    mapDispatchToProps,
-  ),
-  lifecycle({
-    componentDidMount() {
-      this.props.setCards(this.props.cardsList)
-      this.props.setInitialCardsNumber(this.props.cardsList.length)
-    },
-  }),
-)(QuizScreen)
