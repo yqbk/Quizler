@@ -1,15 +1,17 @@
-import { call, put } from 'redux-saga/effects'
+import { call, put, select } from 'redux-saga/effects'
 import LessonsActions from './reducers'
 import API, { graphqlOperation } from '@aws-amplify/api'
-import { listLessons, getUser } from '../../src/graphql/queries'
+import { listLessons, getUser, getLesson } from '../../src/graphql/queries'
 import {
   createLesson,
   deleteLesson,
   createUser,
+  updateLesson,
 } from '../../src/graphql/mutations'
 import { goBack } from '../../utils/actions'
 import Auth from '@aws-amplify/auth'
 import _get from 'lodash/get'
+import { lessonSelector } from './selector'
 
 export function* getLessonsFlow() {
   try {
@@ -84,6 +86,61 @@ export function* addLessonFlow({ title }) {
       yield put(LessonsActions.addLessonSuccess(response))
     } else {
       yield put(LessonsActions.addLessonFailure(`Add lesson failure: ${title}`))
+    }
+  } catch (error) {
+    yield put(LessonsActions.addLessonFailure(error.message))
+  }
+}
+
+export function* updateLessonFlow({ title, id, successRatio } = {}) {
+  try {
+    // const a = () => Auth.currentUserInfo()
+    // const test = yield call(a)
+    // const currentUserId = _get(a, 'id') || test.id
+
+    // if (!currentUserId) {
+    //   return
+    // }
+
+    const lessonData = yield select(lessonSelector(id))
+
+    // ---------
+    const operation1 = graphqlOperation(getLesson, {
+      id: id,
+    })
+    const getCurrentLessonApi = () => API.graphql(operation1)
+
+    const graphqlData1 = yield call(getCurrentLessonApi)
+
+    const currentDataSuccessRatio = _get(
+      graphqlData1,
+      ['data', 'getLesson', 'successRatio'],
+      [],
+    )
+
+    // ---------
+
+    const operation = graphqlOperation(updateLesson, {
+      input: {
+        title: title,
+        id: id,
+        // lessonUserId: currentUserId,
+        successRatio: [...currentDataSuccessRatio, successRatio],
+      },
+    })
+    const updateLessonApi = () => API.graphql(operation)
+
+    const graphqlData = yield call(updateLessonApi)
+
+    const response = graphqlData.data
+
+
+    if (response) {
+      yield put(LessonsActions.updateLessonSuccess(response))
+    } else {
+      yield put(
+        LessonsActions.updateLessonFailure(`Add lesson failure: ${title}`),
+      )
     }
   } catch (error) {
     yield put(LessonsActions.addLessonFailure(error.message))

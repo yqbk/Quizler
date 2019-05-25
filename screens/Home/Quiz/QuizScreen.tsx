@@ -4,6 +4,7 @@ import { Container, Text, Card, CardItem, Button } from 'native-base'
 
 import SwipeCards from 'react-native-swipe-cards'
 import Analytics from '@aws-amplify/analytics'
+import LessonsActions from '../../../containers/lessons/reducers'
 
 import { connect } from 'react-redux'
 import {
@@ -20,6 +21,7 @@ import styled from 'styled-components'
 import { bindActionCreators } from '../../../utils/reduxUtils'
 import { cardsSelector } from '../../../containers/cards/selector'
 import FlipCard from 'react-native-flip-card'
+import { lessonSelector } from '../../../containers/lessons/selector'
 
 const shuffle = (a: Array<Object>) => {
   for (let i = a.length - 1; i > 0; i--) {
@@ -39,6 +41,7 @@ const QuizScreen = ({
   repeatedCards,
   setRepeatedCards,
   result,
+  updateLesson,
 }) => {
   const lessonDetails = navigation.getParam('lessonDetails')
 
@@ -180,7 +183,8 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = bindActionCreators({
-  // removeCard: cardId => CardsActions.removeCardRequest(cardId),
+  updateLesson: (title, id, successRatio) =>
+    LessonsActions.updateLessonRequest(title, id, successRatio),
 })
 
 export default compose(
@@ -207,6 +211,10 @@ export default compose(
     },
 
     componentWillUnmount() {
+      const { title, id } = this.props.navigation.getParam('lessonDetails')
+      // const test = this.props.lessonData
+
+      this.props.updateLesson(title, id, this.props.result)
       console.log('Wynik', this.props.result)
       Alert.alert(`Wynik: ${this.props.result}`)
     },
