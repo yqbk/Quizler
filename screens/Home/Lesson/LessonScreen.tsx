@@ -11,6 +11,7 @@ import {
   CardItem,
   Body,
   Spinner,
+  SwipeRow,
 } from 'native-base'
 
 import { ListView, Alert, View, FlatList, ScrollView } from 'react-native'
@@ -57,26 +58,30 @@ const LessonScreen = ({
     <View style={{ flex: 1, borderWidth: 3 }}>
       {/* <Content padder contentContainerStyle={{ flexGrow: 1 }}> */}
       {cards.length ? (
-        <List
-          leftOpenValue={75}
-          rightOpenValue={-75}
-          dataSource={ds.cloneWithRows(cards)}
-          renderScrollComponent={ (props) => <ScrollView style={{flex: 1}} /> }
-          renderRow={data => (
-            <ListItem>
-              <Text> {data.ask} </Text>
-              <AnswerText> {data.answer} </AnswerText>
-            </ListItem>
-          )}
-          renderRightHiddenRow={data => (
-            <Button full onPress={() => console.log(data)}>
-              <Icon active name="information-circle" />
-            </Button>
-          )}
-          renderLeftHiddenRow={data => (
-            <Button full danger onPress={() => removeCard(data.id)}>
-              <Icon active name="trash" />
-            </Button>
+        <FlatList
+          data={cards}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <SwipeRow
+              leftOpenValue={75}
+              rightOpenValue={-75}
+              body={
+                <ListItem>
+                  <Text> {item.ask} </Text>
+                  <AnswerText> {item.answer} </AnswerText>
+                </ListItem>
+              }
+              left={
+                <Button full onPress={() => console.log(item)}>
+                  <Icon active name="information-circle" />
+                </Button>
+              }
+              right={
+                <Button full danger onPress={() => removeCard(item.id)}>
+                  <Icon active name="trash" />
+                </Button>
+              }
+            />
           )}
         />
       ) : (
@@ -85,35 +90,35 @@ const LessonScreen = ({
 
       <AddCard lessonId={id} />
 
-        <View
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: 20,
-            flexDirection: 'row',
-          }}
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: 20,
+          flexDirection: 'row',
+        }}
+      >
+        <Button
+          block
+          onPress={() =>
+            navigation.navigate('Quiz', {
+              lessonDetails: { id, title },
+            })
+          }
+          style={{ flex: 1 }}
         >
-          <Button
-            block
-            onPress={() =>
-              navigation.navigate('Quiz', {
-                lessonDetails: { id, title},
-              })
-            }
-            style={{ flex: 1 }}
-          >
-            <Text> Start lesson </Text>
-          </Button>
+          <Text> Start lesson </Text>
+        </Button>
 
-          <Button
-            danger
-            block
-            onPress={() => removeLessonDialog(title, removeLesson, id)}
-            style={{ flex: 1 }}
-          >
-            <Text> Remove lesson </Text>
-          </Button>
-        </View>
+        <Button
+          danger
+          block
+          onPress={() => removeLessonDialog(title, removeLesson, id)}
+          style={{ flex: 1 }}
+        >
+          <Text> Remove lesson </Text>
+        </Button>
+      </View>
       {/* </Content> */}
     </View>
   )
@@ -143,12 +148,11 @@ const mapDispatchToProps = bindActionCreators({
 })
 
 export default compose(
-
   connect(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  // const ds = 
+  // const ds =
   // withState('data', 'setData', ''),
   // withHandlers({
   //   changeData: ({ setData }) => () => setData(data => data),
@@ -163,6 +167,5 @@ export default compose(
     //   console.log('update');
     //   this.props.setData(new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }))
     // }
-
   }),
 )(LessonScreen)
