@@ -1,9 +1,9 @@
 {
   "devToolsPort": 19002,
-  "expoServerPort": null,
-  "packagerPort": null,
-  "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null
+  "expoServerPort": 19000,
+  "packagerPort": 19003,
+  "packagerPid": 42929,
+  "expoServerNgrokUrl": "https://si-mju.yqbk.quizler-expo-ts.exp.direct",
+  "packagerNgrokUrl": "https://packager.si-mju.yqbk.quizler-expo-ts.exp.direct",
+  "ngrokPid": 42943
 }

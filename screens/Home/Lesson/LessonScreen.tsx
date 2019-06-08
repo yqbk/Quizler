@@ -10,14 +10,14 @@ import {
   Card,
   CardItem,
   Body,
+  Spinner,
 } from 'native-base'
 
-import { ListView, Alert } from 'react-native'
+import { ListView, Alert, View, FlatList, ScrollView } from 'react-native'
 
 import { connect } from 'react-redux'
-import { lifecycle, compose } from 'recompose'
+import { lifecycle, compose, withState, withHandlers } from 'recompose'
 
-import { View } from 'react-native'
 import styled from 'styled-components'
 
 import LessonsActions from '../../../containers/lessons/reducers'
@@ -25,6 +25,7 @@ import CardsActions from '../../../containers/cards/actions'
 import { bindActionCreators } from '../../../utils/reduxUtils'
 import { cardsSelector } from '../../../containers/cards/selector'
 import AddCard from './components/AddCard'
+import COLORS from '../../../config/Colors'
 
 const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
 
@@ -53,12 +54,14 @@ const LessonScreen = ({
   const { title, id } = navigation.getParam('lesson')
 
   return (
-    <Container>
-      <Content padder contentContainerStyle={{ flexGrow: 1 }}>
+    <View style={{ flex: 1, borderWidth: 3 }}>
+      {/* <Content padder contentContainerStyle={{ flexGrow: 1 }}> */}
+      {cards.length ? (
         <List
           leftOpenValue={75}
           rightOpenValue={-75}
           dataSource={ds.cloneWithRows(cards)}
+          renderScrollComponent={ (props) => <ScrollView style={{flex: 1}} /> }
           renderRow={data => (
             <ListItem>
               <Text> {data.ask} </Text>
@@ -76,8 +79,11 @@ const LessonScreen = ({
             </Button>
           )}
         />
+      ) : (
+        <Spinner color={COLORS.tintColor} />
+      )}
 
-        <AddCard lessonId={id} />
+      <AddCard lessonId={id} />
 
         <View
           style={{
@@ -108,8 +114,8 @@ const LessonScreen = ({
             <Text> Remove lesson </Text>
           </Button>
         </View>
-      </Content>
-    </Container>
+      {/* </Content> */}
+    </View>
   )
 }
 
@@ -137,14 +143,26 @@ const mapDispatchToProps = bindActionCreators({
 })
 
 export default compose(
+
   connect(
     mapStateToProps,
     mapDispatchToProps,
   ),
+  // const ds = 
+  // withState('data', 'setData', ''),
+  // withHandlers({
+  //   changeData: ({ setData }) => () => setData(data => data),
+  // }),
   lifecycle({
     componentDidMount() {
       const { id } = this.props.navigation.getParam('lesson')
       this.props.getCards(id)
     },
+
+    // componentDidUpdate() {
+    //   console.log('update');
+    //   this.props.setData(new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }))
+    // }
+
   }),
 )(LessonScreen)
