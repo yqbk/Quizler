@@ -1,28 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import {
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  View,
-  TextInput,
-  Alert,
-  FlatList,
-} from 'react-native'
+
 import NewLesson from './NewLesson'
 
-import {
-  Container,
-  Content,
-  Button,
-  Text,
-  Icon,
-  List,
-  ListItem,
-  Card,
-  CardItem,
-  Body,
-} from 'native-base'
+import { Card, CardItem } from 'native-base'
 
 import COLORS from '../config/Colors'
 
