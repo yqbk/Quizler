@@ -1,32 +1,20 @@
 import React from 'react'
-import {
-  Container,
-  Content,
-  Button,
-  Text,
-  Icon,
-  List,
-  ListItem,
-  Card,
-  CardItem,
-  Body,
-} from 'native-base'
-
-import { ListView, Alert } from 'react-native'
-
+import { Button, Text, Icon, Spinner, SwipeRow } from 'native-base'
+import { Alert, View, FlatList } from 'react-native'
+import _get from 'lodash/get'
 import { connect } from 'react-redux'
 import { lifecycle, compose } from 'recompose'
-
-import { View } from 'react-native'
 import styled from 'styled-components'
 
 import LessonsActions from '../../../containers/lessons/reducers'
 import CardsActions from '../../../containers/cards/actions'
 import { bindActionCreators } from '../../../utils/reduxUtils'
-import { cardsSelector } from '../../../containers/cards/selector'
+import {
+  cardsSelector,
+  cardsFetchingSelector,
+} from '../../../containers/cards/selector'
 import AddCard from './components/AddCard'
-
-const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
+import COLORS from '../../../config/Colors'
 
 const removeLessonDialog = (className, removeLesson, id) =>
   Alert.alert(
@@ -35,7 +23,6 @@ const removeLessonDialog = (className, removeLesson, id) =>
     [
       {
         text: 'Cancel',
-        // onPress: () => null,
         style: 'cancel',
       },
       { text: 'OK', onPress: () => removeLesson(id) },
@@ -44,82 +31,134 @@ const removeLessonDialog = (className, removeLesson, id) =>
   )
 
 const LessonScreen = ({
-  navigation,
+  cardsFetching,
   removeLesson,
-  cards,
-  getCards,
+  navigation,
   removeCard,
+  getCards,
+  cards,
 }) => {
   const { title, id } = navigation.getParam('lesson')
 
+  if (cardsFetching) {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Spinner color={COLORS.mainBlue} />
+      </View>
+    )
+  }
+
   return (
-    <Container>
-      <Content padder contentContainerStyle={{ flexGrow: 1 }}>
-        <List
-          leftOpenValue={75}
-          rightOpenValue={-75}
-          dataSource={ds.cloneWithRows(cards)}
-          renderRow={data => (
-            <ListItem>
-              <Text> {data.ask} </Text>
-              <AnswerText> {data.answer} </AnswerText>
-            </ListItem>
-          )}
-          renderRightHiddenRow={data => (
-            <Button full onPress={() => console.log(data)}>
-              <Icon active name="information-circle" />
-            </Button>
-          )}
-          renderLeftHiddenRow={data => (
-            <Button full danger onPress={() => removeCard(data.id)}>
-              <Icon active name="trash" />
-            </Button>
+    <View style={{ flex: 1 }}>
+      <AddCard lessonId={id} updateCards={() => getCards(id)} />
+
+      {cards.length ? (
+        <FlatList
+          data={cards}
+          refreshing={cardsFetching}
+          onRefresh={() => getCards(id)}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item, index }) => (
+            <SwipeRow
+              leftOpenValue={75}
+              rightOpenValue={-75}
+              body={
+                <View
+                  style={{
+                    flex: 1,
+                    padding: 24,
+                    flexDirection: 'row',
+                  }}
+                >
+                  <Order>{`${index + 1}. `}</Order>
+                  <AskText>{item.ask}</AskText>
+                  <AnswerText>{item.answer}</AnswerText>
+                </View>
+              }
+              disableRightSwipe
+              right={
+                <Button
+                  full
+                  danger
+                  onPress={() => {
+                    removeCard(item.id)
+                    getCards(id)
+                  }}
+                >
+                  <Icon active name="trash" />
+                </Button>
+              }
+            />
           )}
         />
-
-        <AddCard lessonId={id} />
-
+      ) : (
         <View
-          style={{
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: 20,
-            flexDirection: 'row',
-          }}
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
         >
-          <Button
-            block
-            onPress={() =>
-              navigation.navigate('Quiz', {
-                lessonDetails: { id, title},
-              })
-            }
-            style={{ flex: 1 }}
-          >
-            <Text> Start lesson </Text>
-          </Button>
-
-          <Button
-            danger
-            block
-            onPress={() => removeLessonDialog(title, removeLesson, id)}
-            style={{ flex: 1 }}
-          >
-            <Text> Remove lesson </Text>
-          </Button>
+          <AskText>No cards...</AskText>
         </View>
-      </Content>
-    </Container>
+      )}
+
+      <View
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: 20,
+          flexDirection: 'row',
+        }}
+      >
+        <Button
+          block
+          onPress={() =>
+            navigation.navigate('Quiz', {
+              lessonDetails: { id, title },
+            })
+          }
+          style={{ flex: 4 }}
+        >
+          <Text>Start lesson</Text>
+        </Button>
+
+        <View style={{ flex: 1 }} />
+
+        <Button
+          danger
+          block
+          onPress={() => removeLessonDialog(title, removeLesson, id)}
+          style={{ flex: 2 }}
+        >
+          <Text>Remove</Text>
+        </Button>
+      </View>
+    </View>
   )
 }
 
-const CardsView = styled.View`
+
+const Order = styled.Text`
+  width: 24px;
+  font-size: 14px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+`
+
+const AskText = styled.Text`
   flex: 1;
+  font-size: 18px;
+  font-weight: 500;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 `
 
 const AnswerText = styled.Text`
-  font-size: 12px;
+  font-size: 18px;
   color: gray;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 `
 
 export const Spacer = styled.View`
@@ -128,6 +167,7 @@ export const Spacer = styled.View`
 
 const mapStateToProps = state => ({
   cards: cardsSelector(state),
+  cardsFetching: cardsFetchingSelector(state),
 })
 
 const mapDispatchToProps = bindActionCreators({
