@@ -1,4 +1,4 @@
-# Quizler-Expo-TS
+# Quizler
 
 ## Description
 
@@ -10,6 +10,10 @@ learning, track progress of acquiring knowledge and presenting results using mul
 visualization methods. The important part of this paper would be designing and
 preparing visual layer of the platform in the modern manner. The application itself will be
 created for the usage on mobile devices.
+
+## Screenshots
+
+
 
 ### Author
 
