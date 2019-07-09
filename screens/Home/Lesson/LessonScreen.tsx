@@ -16,7 +16,7 @@ import {
 import AddCard from './components/AddCard'
 import COLORS from '../../../config/Colors'
 
-const removeLessonDialog = (className, removeLesson, id) =>
+const removeLessonDialog = (className, removeLesson, id, navigation) =>
   Alert.alert(
     'Do you want to remove this class?',
     `${className}`,
@@ -25,7 +25,10 @@ const removeLessonDialog = (className, removeLesson, id) =>
         text: 'Cancel',
         style: 'cancel',
       },
-      { text: 'OK', onPress: () => removeLesson(id) },
+      { text: 'OK', onPress: () => {
+        navigation.goBack()
+        removeLesson(id)
+      } },
     ],
     { cancelable: false },
   )
@@ -124,7 +127,7 @@ const LessonScreen = ({
         <Button
           danger
           block
-          onPress={() => removeLessonDialog(title, removeLesson, id)}
+          onPress={() => removeLessonDialog(title, removeLesson, id, navigation)}
           style={{ flex: 2 }}
         >
           <Text>Remove</Text>
