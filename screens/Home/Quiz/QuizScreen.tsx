@@ -212,11 +212,9 @@ export default compose(
 
     componentWillUnmount() {
       const { title, id } = this.props.navigation.getParam('lessonDetails')
-      // const test = this.props.lessonData
 
       this.props.updateLesson(title, id, this.props.result)
-      console.log('Wynik', this.props.result)
-      Alert.alert(`Wynik: ${this.props.result}`)
+      Alert.alert(`Result: ${this.props.result}`)
     },
   }),
 )(QuizScreen)

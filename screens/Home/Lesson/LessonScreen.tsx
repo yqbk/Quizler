@@ -1,34 +1,20 @@
 import React from 'react'
-import {
-  Container,
-  Content,
-  Button,
-  Text,
-  Icon,
-  List,
-  ListItem,
-  Card,
-  CardItem,
-  Body,
-  Spinner,
-  SwipeRow,
-} from 'native-base'
-
-import { ListView, Alert, View, FlatList, ScrollView } from 'react-native'
-
+import { Button, Text, Icon, Spinner, SwipeRow } from 'native-base'
+import { Alert, View, FlatList } from 'react-native'
+import _get from 'lodash/get'
 import { connect } from 'react-redux'
-import { lifecycle, compose, withState, withHandlers } from 'recompose'
-
+import { lifecycle, compose } from 'recompose'
 import styled from 'styled-components'
 
 import LessonsActions from '../../../containers/lessons/reducers'
 import CardsActions from '../../../containers/cards/actions'
 import { bindActionCreators } from '../../../utils/reduxUtils'
-import { cardsSelector } from '../../../containers/cards/selector'
+import {
+  cardsSelector,
+  cardsFetchingSelector,
+} from '../../../containers/cards/selector'
 import AddCard from './components/AddCard'
 import COLORS from '../../../config/Colors'
-
-const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 })
 
 const removeLessonDialog = (className, removeLesson, id) =>
   Alert.alert(
@@ -37,7 +23,6 @@ const removeLessonDialog = (className, removeLesson, id) =>
     [
       {
         text: 'Cancel',
-        // onPress: () => null,
         style: 'cancel',
       },
       { text: 'OK', onPress: () => removeLesson(id) },
@@ -46,38 +31,60 @@ const removeLessonDialog = (className, removeLesson, id) =>
   )
 
 const LessonScreen = ({
-  navigation,
+  cardsFetching,
   removeLesson,
-  cards,
-  getCards,
+  navigation,
   removeCard,
+  getCards,
+  cards,
 }) => {
   const { title, id } = navigation.getParam('lesson')
 
+  if (cardsFetching) {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Spinner color={COLORS.mainBlue} />
+      </View>
+    )
+  }
+
   return (
-    <View style={{ flex: 1, borderWidth: 3 }}>
-      {/* <Content padder contentContainerStyle={{ flexGrow: 1 }}> */}
+    <View style={{ flex: 1 }}>
+      <AddCard lessonId={id} updateCards={() => getCards(id)} />
+
       {cards.length ? (
         <FlatList
           data={cards}
+          refreshing={cardsFetching}
+          onRefresh={() => getCards(id)}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => (
+          renderItem={({ item, index }) => (
             <SwipeRow
               leftOpenValue={75}
               rightOpenValue={-75}
               body={
-                <ListItem>
-                  <Text> {item.ask} </Text>
-                  <AnswerText> {item.answer} </AnswerText>
-                </ListItem>
+                <View
+                  style={{
+                    flex: 1,
+                    padding: 24,
+                    flexDirection: 'row',
+                  }}
+                >
+                  <Order>{`${index + 1}. `}</Order>
+                  <AskText>{item.ask}</AskText>
+                  <AnswerText>{item.answer}</AnswerText>
+                </View>
               }
-              left={
-                <Button full onPress={() => console.log(item)}>
-                  <Icon active name="information-circle" />
-                </Button>
-              }
+              disableRightSwipe
               right={
-                <Button full danger onPress={() => removeCard(item.id)}>
+                <Button
+                  full
+                  danger
+                  onPress={() => {
+                    removeCard(item.id)
+                    getCards(id)
+                  }}
+                >
                   <Icon active name="trash" />
                 </Button>
               }
@@ -85,10 +92,12 @@ const LessonScreen = ({
           )}
         />
       ) : (
-        <Spinner color={COLORS.tintColor} />
+        <View
+          style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}
+        >
+          <AskText>No cards...</AskText>
+        </View>
       )}
-
-      <AddCard lessonId={id} />
 
       <View
         style={{
@@ -105,32 +114,51 @@ const LessonScreen = ({
               lessonDetails: { id, title },
             })
           }
-          style={{ flex: 1 }}
+          style={{ flex: 4 }}
         >
-          <Text> Start lesson </Text>
+          <Text>Start lesson</Text>
         </Button>
+
+        <View style={{ flex: 1 }} />
 
         <Button
           danger
           block
           onPress={() => removeLessonDialog(title, removeLesson, id)}
-          style={{ flex: 1 }}
+          style={{ flex: 2 }}
         >
-          <Text> Remove lesson </Text>
+          <Text>Remove</Text>
         </Button>
       </View>
-      {/* </Content> */}
     </View>
   )
 }
 
-const CardsView = styled.View`
+
+const Order = styled.Text`
+  width: 24px;
+  font-size: 14px;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+`
+
+const AskText = styled.Text`
   flex: 1;
+  font-size: 18px;
+  font-weight: 500;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 `
 
 const AnswerText = styled.Text`
-  font-size: 12px;
+  font-size: 18px;
   color: gray;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 `
 
 export const Spacer = styled.View`
@@ -139,6 +167,7 @@ export const Spacer = styled.View`
 
 const mapStateToProps = state => ({
   cards: cardsSelector(state),
+  cardsFetching: cardsFetchingSelector(state),
 })
 
 const mapDispatchToProps = bindActionCreators({
@@ -152,20 +181,10 @@ export default compose(
     mapStateToProps,
     mapDispatchToProps,
   ),
-  // const ds =
-  // withState('data', 'setData', ''),
-  // withHandlers({
-  //   changeData: ({ setData }) => () => setData(data => data),
-  // }),
   lifecycle({
     componentDidMount() {
       const { id } = this.props.navigation.getParam('lesson')
       this.props.getCards(id)
     },
-
-    // componentDidUpdate() {
-    //   console.log('update');
-    //   this.props.setData(new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 }))
-    // }
   }),
 )(LessonScreen)
